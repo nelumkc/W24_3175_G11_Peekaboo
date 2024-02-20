@@ -1,0 +1,17 @@
+[
+  {
+    "id" : 1,
+    "image" : "checkin",
+    "text" : "Check in"
+  },
+  {
+    "id" : 2,
+    "image" : "activity",
+    "text" : "Activity"
+  },
+  {
+    "id" : 3,
+    "image" : "checkout",
+    "text" : "Check out"
+  }
+]

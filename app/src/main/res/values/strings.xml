@@ -47,4 +47,8 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="txtViewNewMessageTitle">New Message</string>
+    <string name="bottom_home">Home</string>
+    <string name="imgViewCheckin">Check in</string>
+    <string name="imgViewCheckout">Check out</string>
+    <string name="imgViewActivity">Activity</string>
 </resources>
