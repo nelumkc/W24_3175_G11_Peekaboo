@@ -13,6 +13,11 @@
         android:theme="@style/Theme.W24_3175_G11_Peekaboo"
         tools:targetApi="31">
         <activity
+            android:name=".NewMessageActivity"
+            android:exported="false"
+            android:label="@string/title_activity_new_message"
+            android:theme="@style/Theme.W24_3175_G11_Peekaboo" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
