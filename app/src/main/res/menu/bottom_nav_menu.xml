@@ -4,9 +4,11 @@
         android:id="@+id/bottom_home"
         android:icon="@drawable/baseline_home_24"
         android:title="@string/bottom_home" />
-    <item android:id="@+id/bottom_message"
-        android:title="Message"
-        android:icon="@drawable/baseline_chat_24"/>
+    <item
+        android:id="@+id/bottom_message"
+        android:contentDescription="@string/bottom_Messages"
+        android:icon="@drawable/baseline_chat_24"
+        android:title="Message" />
     <item android:id="@+id/bottom_classroom"
         android:title="Classroom"
         android:icon="@drawable/baseline_child_care_24"/>
