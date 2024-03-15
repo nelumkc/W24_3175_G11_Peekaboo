@@ -1,4 +1,4 @@
-package com.example.w24_3175_g11_peekaboo;
+package com.example.w24_3175_g11_peekaboo.fragments;
 
 import android.os.Bundle;
 
@@ -13,6 +13,10 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.w24_3175_g11_peekaboo.model.Item;
+import com.example.w24_3175_g11_peekaboo.JsonUtils;
+import com.example.w24_3175_g11_peekaboo.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,6 +1,5 @@
-package com.example.w24_3175_g11_peekaboo;
+package com.example.w24_3175_g11_peekaboo.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,10 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.w24_3175_g11_peekaboo.R;
 
 
 public class MessageFragment extends Fragment {
