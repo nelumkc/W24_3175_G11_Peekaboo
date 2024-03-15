@@ -1,4 +1,4 @@
-package com.example.w24_3175_g11_peekaboo;
+package com.example.w24_3175_g11_peekaboo.model;
 
 public class Item {
     private String text;

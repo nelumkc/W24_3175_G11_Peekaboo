@@ -1,4 +1,4 @@
-package com.example.w24_3175_g11_peekaboo;
+package com.example.w24_3175_g11_peekaboo.fragments;
 
 import android.os.Bundle;
 
@@ -8,18 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ClassroomFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ClassroomFragment extends Fragment {
+import com.example.w24_3175_g11_peekaboo.R;
+
+
+public class NewMessageFragment extends Fragment {
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_classroom, container, false);
+        return inflater.inflate(R.layout.fragment_new_message, container, false);
     }
 }

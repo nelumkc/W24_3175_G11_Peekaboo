@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">W24_3175_G11_Peekaboo</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtbtnCompose">Compose</string>
     <string name="title_activity_new_message">NewMessageActivity</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -15,4 +13,14 @@
     <string name="imgViewCheckout">Check out</string>
     <string name="imgViewActivity">Activity</string>
     <string name="bottom_Messages">Messages</string>
+    <string name="editTextEmail">Email</string>
+    <string name="editTextPassword">Password</string>
+    <string name="btnLogin">Log in</string>
+    <string name="txtViewSignUp">dont_have_an_account_sign_up</string>
+    <string name="checkBoxRememberMe">RememberMe</string>
+    <string name="txtViewForgotPassword">ForgotPassword</string>
+    <string name="imgViewlogo">logo</string>
+    <string name="textViewSignup">Don\'t have an account ? Sign up</string>
+    <string name="btnLogout">Log out</string>
+    <string name="default_web_client_id">1042667222515-r3vd52tg26cs4lrs8frhn2fm5ie1tmfj.apps.googleusercontent.com</string>
 </resources>

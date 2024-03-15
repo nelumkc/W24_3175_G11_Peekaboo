@@ -1,11 +1,15 @@
-package com.example.w24_3175_g11_peekaboo;
+package com.example.w24_3175_g11_peekaboo.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.w24_3175_g11_peekaboo.fragments.ClassroomFragment;
+import com.example.w24_3175_g11_peekaboo.fragments.HomeFragment;
+import com.example.w24_3175_g11_peekaboo.fragments.MessageFragment;
+import com.example.w24_3175_g11_peekaboo.fragments.MoreFragment;
+import com.example.w24_3175_g11_peekaboo.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
