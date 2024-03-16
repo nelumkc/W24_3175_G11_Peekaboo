@@ -34,6 +34,7 @@
     <string name="txtViewBtn">Choose File</string>
     <string name="txtBtnSend">Send</string>
     <string name="txtSpinnerPrompt">choose a child name</string>
+    <string name="txtViewRegistartion">Registration</string>
     <string-array name="ChildNames">
         <item>Tehana Pabaduli</item>
         <item>Dinu Seth</item>
