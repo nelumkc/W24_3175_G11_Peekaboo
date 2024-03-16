@@ -37,6 +37,10 @@ public class MessageFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+
+
+
         return view;
     }
 
