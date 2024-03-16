@@ -23,4 +23,20 @@
     <string name="textViewSignup">Don\'t have an account ? Sign up</string>
     <string name="btnLogout">Log out</string>
     <string name="default_web_client_id">1042667222515-r3vd52tg26cs4lrs8frhn2fm5ie1tmfj.apps.googleusercontent.com</string>
+
+    <string name="txtTitleMessage">New Message</string>
+    <string name="selectChildText">Select a Child</string>
+    <string name="textViewSubject">Subject</string>
+    <string name="TextViewMsgBody">Body</string>
+    <string name="msgBodyHint">Write your message here...</string>
+    <string name="HintMsgSubject">write message subject here</string>
+    <string name="txtViewAttachmentTitle">Attachment</string>
+    <string name="txtViewBtn">Choose File</string>
+    <string name="txtBtnSend">Send</string>
+    <string name="txtSpinnerPrompt">choose a child name</string>
+    <string-array name="ChildNames">
+        <item>Tehana Pabaduli</item>
+        <item>Dinu Seth</item>
+        <item>Nady Toshika</item>
+    </string-array>
 </resources>
