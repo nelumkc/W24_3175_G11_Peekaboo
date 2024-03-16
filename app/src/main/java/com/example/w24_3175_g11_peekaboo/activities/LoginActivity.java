@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 );
             }
         });
-/*
+
        //Google Sign in
         googleSignInLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -108,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
- */
     }
 
 
@@ -161,7 +160,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                           // Log.d(TAG,"Firebase auth with google sucessful");
                             navigateToMainActivity();
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1042667222515-obbet1bokmou147q4qeuguf0dhndvjfv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.w24_3175_g11_peekaboo",
+            "certificate_hash": "c71b4e97086ed8842745759d3974cf1d334c4caa"
+          }
+        },
+        {
           "client_id": "1042667222515-r3vd52tg26cs4lrs8frhn2fm5ie1tmfj.apps.googleusercontent.com",
           "client_type": 3
         }
