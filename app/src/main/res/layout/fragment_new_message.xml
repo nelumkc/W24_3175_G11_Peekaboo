@@ -11,13 +11,129 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/txtViewNewMessageTitle"
+            android:id="@+id/TextTileMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/txtViewNewMessageTitle"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="60dp"
+            android:fontFamily="serif"
+            android:text="@string/txtTitleMessage"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/TextViewSelectChild"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="25dp"
+            android:fontFamily="serif"
+            android:text="@string/selectChildText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TextTileMessage" />
+
+        <Spinner
+            android:id="@+id/spinnerSelectChild"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="32dp"
+            android:entries="@array/ChildNames"
+            android:prompt="@string/txtSpinnerPrompt"
+            android:spinnerMode="dialog"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/TextViewSelectChild"
+            app:layout_constraintTop_toBottomOf="@+id/TextTileMessage" />
+
+        <TextView
+            android:id="@+id/textViewSubject"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="44dp"
+            android:fontFamily="serif"
+            android:text="@string/textViewSubject"
+            android:textAlignment="viewEnd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TextViewSelectChild" />
+
+        <EditText
+            android:id="@+id/editTextSubject"
+            android:layout_width="235dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:ems="10"
+            android:hint="@string/HintMsgSubject"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textViewSubject"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerSelectChild" />
+
+        <TextView
+            android:id="@+id/textViewMsgBody"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="88dp"
+            android:fontFamily="serif"
+            android:text="@string/TextViewMsgBody"
+            android:textAlignment="viewEnd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSubject" />
+
+        <EditText
+            android:id="@+id/editTextMsgBody"
+            android:layout_width="235dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="@string/msgBodyHint"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.428"
+            app:layout_constraintStart_toEndOf="@+id/textViewMsgBody"
+            app:layout_constraintTop_toBottomOf="@+id/editTextSubject" />
+
+        <TextView
+            android:id="@+id/textViewattachmentTitle"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="168dp"
+            android:fontFamily="serif"
+            android:text="@string/txtViewAttachmentTitle"
+            android:textAlignment="viewEnd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMsgBody" />
+
+        <Button
+            android:id="@+id/btnChooseFile"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/material_dynamic_neutral95"
+            android:text="@string/txtViewBtn"
+            android:textColor="@color/black"
+            app:iconTint="@color/material_dynamic_neutral70"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textViewattachmentTitle"
+            app:layout_constraintTop_toBottomOf="@+id/editTextMsgBody" />
+
+        <Button
+            android:id="@+id/BtnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/txtBtnSend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnChooseFile" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
