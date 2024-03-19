@@ -35,9 +35,31 @@
     <string name="txtBtnSend">Send</string>
     <string name="txtSpinnerPrompt">choose a child name</string>
     <string name="txtViewRegistartion">Registration</string>
+    <string name="editTextChildName">Name</string>
+    <string name="editTextDateOfBirth">Date of Birth</string>
+    <string name="textViewTitleRegistration">Registration</string>
     <string-array name="ChildNames">
         <item>Tehana Pabaduli</item>
         <item>Dinu Seth</item>
         <item>Nady Toshika</item>
     </string-array>
+
+    <string name="first_name_label">First Name</string>
+    <string name="first_name_hint">Enter first name</string>
+    <string name="last_name_label">Last Name</string>
+    <string name="last_name_hint">Enter last name</string>
+    <string name="dob_label">Date of Birth</string>
+    <string name="dob_hint">Select date</string>
+    <string name="gender_label">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="profile_pic_label">Profile Picture</string>
+    <string name="profile_pic_hint">Profile picture preview</string>
+    <string name="upload">Upload</string>
+    <string name="parent_name_label">Parent Name</string>
+    <string name="parent_name_hint">Enter parent name</string>
+    <string name="parent_email_label">Parent Email</string>
+    <string name="parent_email_hint">Enter parent email</string>
+    <string name="register">Register</string>
 </resources>
