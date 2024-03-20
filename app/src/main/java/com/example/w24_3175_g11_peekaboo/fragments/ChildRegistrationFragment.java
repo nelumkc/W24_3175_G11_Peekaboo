@@ -43,9 +43,6 @@ public class ChildRegistrationFragment extends Fragment {
     private ActivityResultLauncher<String> getContent;
     private String currentImagePath = null;
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
