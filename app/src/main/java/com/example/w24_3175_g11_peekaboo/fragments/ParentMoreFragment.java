@@ -16,15 +16,13 @@ import com.example.w24_3175_g11_peekaboo.activities.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class MoreFragment extends Fragment {
-
+public class ParentMoreFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_more, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -44,7 +42,6 @@ public class MoreFragment extends Fragment {
 
             }
         });
-
 
 
         return view;

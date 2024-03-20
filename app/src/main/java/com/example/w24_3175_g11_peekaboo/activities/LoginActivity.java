@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.w24_3175_g11_peekaboo.R;
+import com.example.w24_3175_g11_peekaboo.databases.DataBaseHelper;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -52,10 +53,15 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     private ActivityResultLauncher<Intent> googleSignInLauncher;
 
+    private DataBaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // create admin when first installation
+        db = new DataBaseHelper(this);
+        checkFirstRunAndCreateAdmin();
 
         //Login
         loginBtn = findViewById(R.id.btnLogin);
@@ -80,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 );
             }
         });
-/*
+
        //Google Sign in
         googleSignInLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -108,21 +114,34 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
- */
+    }
+
+    private void checkFirstRunAndCreateAdmin() {
+       // SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+       // boolean isFirstRun = prefs.getBoolean("isFirstRun", true);
+
+       // if (isFirstRun) {
+            db.createAdminAccount();
+       //     prefs.edit().putBoolean("isFirstRun", false).apply();
+       // }
     }
 
 
     private void logEmailPassUser(String email, String pwd) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pwd)) {
-            firebaseAuth.signInWithEmailAndPassword(email, pwd)
-                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            //FirebaseUser user = firebaseAuth.getCurrentUser();
-                            setRememberMePreference(rememberMeCheckBox.isChecked());
-                            navigateToMainActivity();
-                        }
-                    });
+            if (!db.doesEmailExist(email)) {
+                Toast.makeText(LoginActivity.this, "Email is not registered.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (db.authenticateUser(email, pwd)) {
+                setRememberMePreference(rememberMeCheckBox.isChecked());
+                navigateToMainActivity();
+            } else {
+                Toast.makeText(LoginActivity.this, "Authentication failed. Please check your credentials.", Toast.LENGTH_SHORT).show();
+            }
+
+        }else {
+            Toast.makeText(LoginActivity.this, "Please enter both email and password.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -136,6 +155,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigateToMainActivity() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("userEmail", emailEt.getText().toString());
         startActivity(intent);
         finish();
     }
@@ -161,8 +181,18 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                           // Log.d(TAG,"Firebase auth with google sucessful");
-                            navigateToMainActivity();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            if (user != null) {
+                                String userEmail = user.getEmail();
+                                if (!db.doesEmailExist(userEmail)) {
+                                    Toast.makeText(LoginActivity.this, "Your email is not registered in our system. Please contact support.", Toast.LENGTH_LONG).show();
+                                    firebaseAuth.signOut();
+                                    return;
+                                }
+                                navigateToMainActivity();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Error during sign in. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
                         }
