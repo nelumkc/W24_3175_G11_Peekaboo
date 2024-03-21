@@ -62,4 +62,10 @@
     <string name="parent_email_label">Parent Email</string>
     <string name="parent_email_hint">Enter parent email</string>
     <string name="register">Register</string>
+    <string name="btnDaycareDirection">Get Daycare Location</string>
+
+    <string name="txtViewMapTitle">Find the Daycare</string>
+    <string name="hintsourceLocation">Enter source Location</string>
+    <string name="HintDestinationLocation">Enter Destination location</string>
+    <string name="BtnOpenNavigation">OPEN NAVIGATION</string>
 </resources>
