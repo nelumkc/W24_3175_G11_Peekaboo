@@ -36,9 +36,14 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     @Override
     public void onBindViewHolder(@NonNull ChildViewHolder holder, int position) {
         Child child = children.get(position);
-        holder.textViewName.setText(child.getName());
-        holder.textViewDob.setText(child.getDob());
-        Picasso.get().load(new File(child.getImagePath())).into(holder.profileImageView);
+        holder.textViewName.setText(child.getChildFname());
+        if(child.getChildDob()!=null){
+            holder.textViewDob.setText(child.getChildDob());
+        }
+        if(child.getChildImage()!=null){
+            Picasso.get().load(new File(child.getChildImage())).into(holder.profileImageView);
+        }
+
     }
 
     @Override
