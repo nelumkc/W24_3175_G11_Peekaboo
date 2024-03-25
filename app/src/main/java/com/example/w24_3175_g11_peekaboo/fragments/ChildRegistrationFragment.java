@@ -65,7 +65,6 @@ public class ChildRegistrationFragment extends Fragment {
         uploadButton = view.findViewById(R.id.btnUpload);
         profilePic = view.findViewById(R.id.picProfile);
 
-
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,19 +76,11 @@ public class ChildRegistrationFragment extends Fragment {
                 String parentEmail = parentEmailEdit.getText().toString().trim();
                 int selectedId = genderGroup.getCheckedRadioButtonId();
                 RadioButton selectedRadioButton = view.findViewById(selectedId);
+                String gender = selectedRadioButton != null ? selectedRadioButton.getText().toString() : "";
 
-
-
-                String gender;
-                if (selectedRadioButton != null) {
-                    gender = selectedRadioButton.getText().toString();
-                } else {
-                    gender = "";
-                }
                 //profile pic
                 String imagePath = currentImagePath;
 
-                //db = new DataBaseHelper(getContext());
                 daycaredb = Room.databaseBuilder(getContext().getApplicationContext(),DaycareDatabase.class,"daycare.db").build();
 
                 //run seperate thread to create users,parents and children
@@ -106,7 +97,7 @@ public class ChildRegistrationFragment extends Fragment {
 
                             if (parentId > 0) {
                                 Child newChild = new Child(firstName, lastName, dob, gender, imagePath, parentId);
-
+                                daycaredb.childDao().insertOneChild(newChild);
                                 // Update UI on success
                                 if (getActivity() != null) {
                                     getActivity().runOnUiThread(new Runnable() {

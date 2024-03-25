@@ -12,10 +12,12 @@ import java.util.List;
 @Dao
 public interface ChildDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertOneChild(Child child);
+    long insertOneChild(Child child);
 
     @Query("SELECT * FROM children")
     List<Child> getAllChildren();
 
+    @Query("SELECT * FROM children WHERE childparentid = :parentid")
+    List<Child> getChildrenByParentId(long parentid);
 
 }

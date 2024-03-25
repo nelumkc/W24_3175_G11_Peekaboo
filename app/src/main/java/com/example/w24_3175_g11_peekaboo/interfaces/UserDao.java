@@ -17,6 +17,18 @@ public interface UserDao {
 
     @Query("SELECT userrole FROM users WHERE userEmail=:email")
     String getUserRoleByEmail(String email);
+    @Query("SELECT * FROM users WHERE useremail= :email AND userpassword= :password LIMIT 1")
+    User findUserByEmailAndPassword(String email,String password);
+
+    @Query("SELECT COUNT(userid) FROM users WHERE userrole = :role")
+    int countUserByRole(String role);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertUserAdmin(User user);
+
+    @Query("SELECT COUNT(userid) FROM users WHERE useremail = :email")
+    int countUserByEmail(String email);
+
 
 
 }
