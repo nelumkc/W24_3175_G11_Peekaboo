@@ -20,4 +20,7 @@ public interface ChildDao {
     @Query("SELECT * FROM children WHERE childparentid = :parentid")
     List<Child> getChildrenByParentId(long parentid);
 
+    @Query("SELECT * FROM children WHERE childfname LIKE '%' || :name || '%'")
+    List<Child> getChildParentIdByChildName(String name);
+
 }

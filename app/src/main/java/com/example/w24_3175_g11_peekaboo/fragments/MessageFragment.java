@@ -16,7 +16,7 @@ import com.example.w24_3175_g11_peekaboo.R;
 
 
 public class MessageFragment extends Fragment {
-    Button btnCompose;
+    Button btnCompose,btnSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,6 +24,7 @@ public class MessageFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_message, container, false);
         btnCompose = view.findViewById(R.id.btnCompose);
+        btnSearch = view.findViewById(R.id.btnSearch);
 
         btnCompose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,6 +34,18 @@ public class MessageFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.frame_container, new NewMessageFragment());
+                transaction.addToBackStack(null); // Add the transaction to the back stack
+                transaction.commit();
+            }
+        });
+
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_container, new ChatFragment());
                 transaction.addToBackStack(null); // Add the transaction to the back stack
                 transaction.commit();
             }
