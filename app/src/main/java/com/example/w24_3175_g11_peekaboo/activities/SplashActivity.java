@@ -27,6 +27,6 @@ public class SplashActivity extends AppCompatActivity {
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, 3000); // Schedule the task to run after 3000 milliseconds (3 seconds)
+        timer.schedule(task, 4000); // Schedule the task to run after 3000 milliseconds (3 seconds)
     }
 }
