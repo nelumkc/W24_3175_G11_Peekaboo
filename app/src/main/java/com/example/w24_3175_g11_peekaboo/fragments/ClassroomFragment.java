@@ -1,6 +1,5 @@
 package com.example.w24_3175_g11_peekaboo.fragments;
 
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +17,20 @@ import android.widget.Toast;
 
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.adapters.ChildAdapter;
-import com.example.w24_3175_g11_peekaboo.databases.DataBaseHelper;
+import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ClassroomFragment extends Fragment {
 
     RecyclerView recyclerView;
     ArrayList<Child> childrenList;
-    DataBaseHelper db;
+    DaycareDatabase daycaredb;
     ChildAdapter adapter;
 
     Button btnNewChild;
@@ -39,13 +42,38 @@ public class ClassroomFragment extends Fragment {
 
         btnNewChild = view.findViewById(R.id.btnNewChild);
 
-        db = new DataBaseHelper(getContext());
+        ///
+        daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
         childrenList = new ArrayList<>();
-        recyclerView = view.findViewById(R.id.recyclerViewChildren);
         adapter = new ChildAdapter(getContext(),childrenList);
+        recyclerView = view.findViewById(R.id.recyclerViewChildren);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        displayData();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Child> children = daycaredb.childDao().getAllChildren();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (children.isEmpty()) {
+                            Toast.makeText(getContext(), "No Entry Exists", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            childrenList.clear();
+                            childrenList.addAll(children);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        });
+        ///
+
+
+
+
 
         btnNewChild.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,25 +87,13 @@ public class ClassroomFragment extends Fragment {
             }
         });
 
-
-
         return view;
     }
 
     private void displayData() {
-        Cursor cursor = db.getData();
-        if(cursor.getCount() == 0){
-            Toast.makeText(getContext(), "No Entry Exists", Toast.LENGTH_SHORT).show();
-            return;
-        }else{
-            while (cursor.moveToNext()){
-                String  name = cursor.getString(1);
-                String  dob = cursor.getString(3);
-                String profilePicPath = cursor.getString(5);
-                childrenList.add(new Child(name, dob, profilePicPath));
-            }
-            adapter.notifyDataSetChanged();
-            cursor.close();
-        }
+
+
+
+
     }
 }

@@ -2,14 +2,15 @@ package com.example.w24_3175_g11_peekaboo.fragments;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -23,11 +24,16 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.w24_3175_g11_peekaboo.R;
-import com.example.w24_3175_g11_peekaboo.databases.DataBaseHelper;
+import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
+import com.example.w24_3175_g11_peekaboo.model.Child;
+import com.example.w24_3175_g11_peekaboo.model.Parent;
+import com.example.w24_3175_g11_peekaboo.model.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ChildRegistrationFragment extends Fragment {
@@ -36,7 +42,8 @@ public class ChildRegistrationFragment extends Fragment {
    RadioGroup genderGroup;
    Button registerButton,uploadButton;
 
-   DataBaseHelper db;
+   //DataBaseHelper db;
+    DaycareDatabase daycaredb;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profilePic;
@@ -58,7 +65,6 @@ public class ChildRegistrationFragment extends Fragment {
         uploadButton = view.findViewById(R.id.btnUpload);
         profilePic = view.findViewById(R.id.picProfile);
 
-
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,28 +76,44 @@ public class ChildRegistrationFragment extends Fragment {
                 String parentEmail = parentEmailEdit.getText().toString().trim();
                 int selectedId = genderGroup.getCheckedRadioButtonId();
                 RadioButton selectedRadioButton = view.findViewById(selectedId);
+                String gender = selectedRadioButton != null ? selectedRadioButton.getText().toString() : "";
 
-                db = new DataBaseHelper(getContext());
-
-                String gender;
-                if (selectedRadioButton != null) {
-                    gender = selectedRadioButton.getText().toString();
-                } else {
-                    gender = "";
-                }
                 //profile pic
                 String imagePath = currentImagePath;
 
+                daycaredb = Room.databaseBuilder(getContext().getApplicationContext(),DaycareDatabase.class,"daycare.db").build();
 
-                Boolean checkInsertData = db.addChildWithParent(firstName,lastName,dob,gender,currentImagePath,parentName,parentEmail);
-                if(checkInsertData == true){
-                    Toast.makeText(getContext(), "New Entry inserted", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getContext(), "New Entry not inserted", Toast.LENGTH_SHORT).show();
-                }
-                if (getActivity() != null) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
+                //run seperate thread to create users,parents and children
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        User newUser = new User(parentName, parentEmail, "PARENT", "123");
+                        Long userId = daycaredb.userDao().insertOneUser(newUser);
+
+                        if (userId > 0) {
+                            Parent newParent = new Parent(userId);
+                            long parentId = daycaredb.parentDao().insertOneParent(newParent);
+
+                            if (parentId > 0) {
+                                Child newChild = new Child(firstName, lastName, dob, gender, imagePath, parentId);
+                                daycaredb.childDao().insertOneChild(newChild);
+                                // Update UI on success
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "Data Successfully inserted", Toast.LENGTH_SHORT).show();
+                                            getActivity().getSupportFragmentManager().popBackStack();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                    }
+                });
+
             }
         });
 
@@ -122,7 +144,13 @@ public class ChildRegistrationFragment extends Fragment {
 
     private String saveUriToInternalStorage(Uri imageUri) {
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+            Bitmap bitmap;
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P){
+                ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), imageUri);
+                bitmap = ImageDecoder.decodeBitmap(source);
+            }else{
+                bitmap =  MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+            }
             String imageName = "childImage_" + System.currentTimeMillis() + ".png";
             return saveToInternalStorage(bitmap, imageName);
         } catch (IOException e) {

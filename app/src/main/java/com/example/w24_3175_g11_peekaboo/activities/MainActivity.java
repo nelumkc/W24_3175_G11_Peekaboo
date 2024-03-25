@@ -5,9 +5,10 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import com.example.w24_3175_g11_peekaboo.R;
-import com.example.w24_3175_g11_peekaboo.databases.DataBaseHelper;
+import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.fragments.ClassroomFragment;
 import com.example.w24_3175_g11_peekaboo.fragments.HomeFragment;
 import com.example.w24_3175_g11_peekaboo.fragments.MessageFragment;
@@ -18,6 +19,9 @@ import com.example.w24_3175_g11_peekaboo.fragments.ParentMessageFragment;
 import com.example.w24_3175_g11_peekaboo.fragments.ParentMoreFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ParentClassroomFragment parentClassroomFragment = new ParentClassroomFragment();
     ParentMoreFragment parentMoreFragment = new ParentMoreFragment();
 
-    DataBaseHelper db;
+    DaycareDatabase daycaredb;
     String userRole = null;
 
     @Override
@@ -46,24 +50,37 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         //replace container->frame layout with home fragment
-        db = new DataBaseHelper(this);
+        daycaredb = Room.databaseBuilder(this.getApplicationContext(), DaycareDatabase.class, "daycare.db").build();
+
         userRole = "PARENT"; // DEFAULT
         String userEmail = getIntent().getStringExtra("userEmail");
 
-        if (userEmail != null) {
-            String roleFromDb = db.getUserRoleByEmail(userEmail);
-            if(roleFromDb!=null && !roleFromDb.isEmpty()){
-               userRole = roleFromDb;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (userEmail != null) {
+                    Fragment selectedFragment;
+                    String roleFromDb = daycaredb.userDao().getUserRoleByEmail(userEmail);
+                    if(roleFromDb!=null && !roleFromDb.isEmpty()){
+                        userRole = roleFromDb;
+                        if(userRole.equals("PARENT")){
+                            selectedFragment = parentHomeFragment;
+                        }else{
+                            selectedFragment = homeFragment;
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,selectedFragment).commit();
+                            }
+                        });
+                        executor.shutdown();
+                    }
+                }
             }
-        }
+        });
 
-
-        if(userRole.equals("PARENT")){
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,parentHomeFragment).commit();
-        }else{
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,homeFragment).commit();
-        }
-        //
 
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
