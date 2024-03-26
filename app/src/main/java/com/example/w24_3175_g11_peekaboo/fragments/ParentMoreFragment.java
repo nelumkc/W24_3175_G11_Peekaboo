@@ -32,6 +32,7 @@ public class ParentMoreFragment extends Fragment {
 
         Button logoutButton = view.findViewById(R.id.btnLogout);
         Button directionButton = view.findViewById(R.id.btnDaycareDirection);
+        Button makepayButton = view.findViewById(R.id.btnMakePayment);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +59,17 @@ public class ParentMoreFragment extends Fragment {
                     transaction.commit();
                 }
 
+        });
+        makepayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.frame_container, new paymentFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
         });
 
         return view;
