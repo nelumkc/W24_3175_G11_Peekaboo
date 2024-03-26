@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,31 +17,31 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
-public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHolder> {
+public class ChildChatAdapter extends RecyclerView.Adapter<ChildChatAdapter.ChildChatViewHolder> {
     private Context context;
     private ArrayList<Child> children;
 
-    private OnItemClickListener onItemClickListener;
-    // A flag to determine the click behavior
-    private boolean isChatEnabled;
+    private Consumer<Child> onChildClicked;
 
-    public ChildAdapter(Context context, ArrayList<Child> children, boolean isChatEnabled, OnItemClickListener listener) {
+
+
+    public ChildChatAdapter(Context context, ArrayList<Child> children,Consumer<Child> onChildClicked) {
         this.context = context;
         this.children = children;
-        this.isChatEnabled = isChatEnabled;
-        this.onItemClickListener = listener;
+        this.onChildClicked = onChildClicked;
     }
 
     @NonNull
     @Override
-    public ChildViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ChildChatAdapter.ChildChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.childentry,parent,false);
-        return new ChildViewHolder(v);
+        return new ChildChatAdapter.ChildChatViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ChildViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ChildChatAdapter.ChildChatViewHolder holder, int position) {
         Child child = children.get(position);
         holder.textViewName.setText(child.getChildFname());
         if(child.getChildDob()!=null){
@@ -50,16 +51,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             Picasso.get().load(new File(child.getChildImage())).into(holder.profileImageView);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(onItemClickListener!=null) {
-                    onItemClickListener.onItemClick(child);
-                }
-            }
-        });
-
-
+        holder.itemView.setOnClickListener(v -> onChildClicked.accept(child));
 
     }
 
@@ -68,10 +60,10 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         return children.size();
     }
 
-    public class ChildViewHolder extends RecyclerView.ViewHolder {
+    public class ChildChatViewHolder extends RecyclerView.ViewHolder {
         TextView textViewName,textViewDob;
         ImageView profileImageView;
-        public ChildViewHolder(@NonNull View itemView) {
+        public ChildChatViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textName);
             textViewDob = itemView.findViewById(R.id.textdob);
@@ -79,8 +71,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Child child);
-    }
+
 
 }

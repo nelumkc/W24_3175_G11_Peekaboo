@@ -70,4 +70,5 @@
     <string name="BtnOpenNavigation">OPEN NAVIGATION</string>
     <string name="btnChat">Chat</string>
     <string name="editTextChild">Child name</string>
+    <string name="editTextMessage">Write message here</string>
 </resources>

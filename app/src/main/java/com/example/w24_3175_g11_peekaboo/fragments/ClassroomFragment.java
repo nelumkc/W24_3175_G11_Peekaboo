@@ -45,30 +45,13 @@ public class ClassroomFragment extends Fragment {
         ///
         daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
         childrenList = new ArrayList<>();
-        adapter = new ChildAdapter(getContext(),childrenList);
+        //adapter = new ChildAdapter(getContext(),childrenList);
+        adapter = new ChildAdapter(getContext(),childrenList,false,this::navigateToChildProfileFragment);
         recyclerView = view.findViewById(R.id.recyclerViewChildren);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Child> children = daycaredb.childDao().getAllChildren();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (children.isEmpty()) {
-                            Toast.makeText(getContext(), "No Entry Exists", Toast.LENGTH_SHORT).show();
 
-                        } else {
-                            childrenList.clear();
-                            childrenList.addAll(children);
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                });
-            }
-        });
+        displayData();
         ///
 
 
@@ -91,9 +74,40 @@ public class ClassroomFragment extends Fragment {
     }
 
     private void displayData() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Child> children = daycaredb.childDao().getAllChildren();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (children.isEmpty()) {
+                            Toast.makeText(getContext(), "No Entry Exists", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            childrenList.clear();
+                            childrenList.addAll(children);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        });
+
+    }
 
 
+    private void navigateToChildProfileFragment(Child child) {
+        ChildProfileFragment childProfileFragment = new ChildProfileFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("child", child);
+        childProfileFragment.setArguments(args);
 
-
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_container, childProfileFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

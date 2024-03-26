@@ -43,10 +43,12 @@ public class MessageFragment extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(), "Create new chat", Toast.LENGTH_SHORT).show();
+
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.frame_container, new ChatFragment());
-                transaction.addToBackStack(null); // Add the transaction to the back stack
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });

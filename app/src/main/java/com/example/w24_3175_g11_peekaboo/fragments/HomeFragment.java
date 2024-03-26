@@ -63,8 +63,6 @@ public class HomeFragment extends Fragment {
 
             itemView.setOnClickListener(v -> {
                 Toast.makeText(getActivity(), "click event", Toast.LENGTH_SHORT).show();
-                // Handle click event to load new fragment layout
-                // You can use an interface to communicate with the activity/fragment
             });
 
             gridLayout.addView(itemView);
