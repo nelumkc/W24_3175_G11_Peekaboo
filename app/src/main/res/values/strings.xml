@@ -68,4 +68,5 @@
     <string name="hintsourceLocation">Enter source Location</string>
     <string name="HintDestinationLocation">Enter Destination location</string>
     <string name="BtnOpenNavigation">OPEN NAVIGATION</string>
+    <string name="btnTextMakePayment">Make Payment</string>
 </resources>
