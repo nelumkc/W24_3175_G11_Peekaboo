@@ -45,7 +45,6 @@ public class ClassroomFragment extends Fragment {
         ///
         daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
         childrenList = new ArrayList<>();
-        //adapter = new ChildAdapter(getContext(),childrenList);
         adapter = new ChildAdapter(getContext(),childrenList,false,this::navigateToChildProfileFragment);
         recyclerView = view.findViewById(R.id.recyclerViewChildren);
         recyclerView.setAdapter(adapter);

@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.adapters.ChildAdapter;
-import com.example.w24_3175_g11_peekaboo.adapters.ChildChatAdapter;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 
@@ -36,7 +35,7 @@ public class ChatFragment extends Fragment {
     ImageButton searchButton;
     RecyclerView recyclerView;
     DaycareDatabase daycaredb;
-    ChildChatAdapter adapter;
+    ChildAdapter adapter;
     ArrayList<Child> childrenList;
 
     @Override
@@ -47,12 +46,14 @@ public class ChatFragment extends Fragment {
         searchButton = view.findViewById(R.id.btnSearchParent);
         searchInput = view.findViewById(R.id.editTextSearch);
         recyclerView = view.findViewById(R.id.recyclerViewParent);
+
         daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
         childrenList = new ArrayList<>();
 
-        adapter = new ChildChatAdapter(getContext(),childrenList,this::startNewChat);
+        adapter = new ChildAdapter(getContext(),childrenList,true,this::navigateToNewChatFragment);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,5 +112,19 @@ public class ChatFragment extends Fragment {
             Log.d("ChatFragment", "Starting transaction to NewChatFragment");
             transaction.commit();
         }
+
+    private void navigateToNewChatFragment(Child child) {
+        //ChildProfileFragment childProfileFragment = new ChildProfileFragment();
+        NewChatFragment newChatFragment = new NewChatFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("child", child);
+        newChatFragment.setArguments(args);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_container, newChatFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
 }

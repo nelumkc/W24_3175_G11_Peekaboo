@@ -22,7 +22,7 @@ public class NewChatFragment extends Fragment {
         Child child = null;
         if (getArguments() != null) {
             child = (Child) getArguments().getSerializable("child");
-            // Use 'child' for your chat setup...
+
         }
 
         return view;
