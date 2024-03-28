@@ -68,5 +68,11 @@
     <string name="hintsourceLocation">Enter source Location</string>
     <string name="HintDestinationLocation">Enter Destination location</string>
     <string name="BtnOpenNavigation">OPEN NAVIGATION</string>
+<<<<<<< HEAD
+    <string name="btnChat">Chat</string>
+    <string name="editTextChild">Child name</string>
+    <string name="editTextMessage">Write message here</string>
+=======
     <string name="btnTextMakePayment">Make Payment</string>
+>>>>>>> origin/master
 </resources>

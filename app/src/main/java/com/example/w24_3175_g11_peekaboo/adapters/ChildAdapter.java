@@ -21,9 +21,15 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     private Context context;
     private ArrayList<Child> children;
 
-    public ChildAdapter(Context context, ArrayList<Child> children) {
+    private OnItemClickListener onItemClickListener;
+    // A flag to determine the click behavior
+    private boolean isChatEnabled;
+
+    public ChildAdapter(Context context, ArrayList<Child> children, boolean isChatEnabled, OnItemClickListener listener) {
         this.context = context;
         this.children = children;
+        this.isChatEnabled = isChatEnabled;
+        this.onItemClickListener = listener;
     }
 
     @NonNull
@@ -44,6 +50,17 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             Picasso.get().load(new File(child.getChildImage())).into(holder.profileImageView);
         }
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onItemClickListener!=null) {
+                    onItemClickListener.onItemClick(child);
+                }
+            }
+        });
+
+
+
     }
 
     @Override
@@ -61,4 +78,9 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
             profileImageView  = itemView.findViewById(R.id.picProfile);
         }
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(Child child);
+    }
+
 }

@@ -8,11 +8,14 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName="children",
         foreignKeys = @ForeignKey(entity = Parent.class,parentColumns = "parentid",childColumns = "childparentid",onDelete = ForeignKey.CASCADE),
         indices = {@Index(value = {"childparentid"})}
 )
-public class Child {
+//Serializable : pass whole object
+public class Child implements Serializable {
     @NonNull
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name="childid")

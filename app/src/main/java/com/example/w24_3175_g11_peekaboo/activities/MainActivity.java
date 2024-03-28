@@ -9,6 +9,7 @@ import androidx.room.Room;
 
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
+import com.example.w24_3175_g11_peekaboo.fragments.ChatFragment;
 import com.example.w24_3175_g11_peekaboo.fragments.ClassroomFragment;
 import com.example.w24_3175_g11_peekaboo.fragments.HomeFragment;
 import com.example.w24_3175_g11_peekaboo.fragments.MessageFragment;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     HomeFragment homeFragment = new HomeFragment();
     MessageFragment messageFragment = new MessageFragment();
+    ChatFragment chatFragment = new ChatFragment();
     ClassroomFragment classroomFragment = new ClassroomFragment();
     MoreFragment moreFragment = new MoreFragment();
 
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.bottom_home) {
                     selectedFragment = userRole.equals("PARENT") ? parentHomeFragment : homeFragment;
                 } else if (item.getItemId() == R.id.bottom_message) {
-                    selectedFragment = userRole.equals("PARENT") ? parentMessageFragment : messageFragment;
+                    selectedFragment = userRole.equals("PARENT") ? parentMessageFragment : chatFragment;
                 } else if (item.getItemId() == R.id.bottom_classroom) {
                     selectedFragment = userRole.equals("PARENT") ? parentClassroomFragment : classroomFragment;
                 } else if (item.getItemId() == R.id.bottom_more) {
