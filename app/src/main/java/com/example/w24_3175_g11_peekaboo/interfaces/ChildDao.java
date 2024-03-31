@@ -23,4 +23,7 @@ public interface ChildDao {
     @Query("SELECT * FROM children WHERE childfname LIKE '%' || :name || '%' OR childlname LIKE '%' || :name || '%'")
     List<Child> searchChildrenByName(String name);
 
+    @Query("SELECT * FROM children WHERE childfname = :fname")
+    long getChildIdByName(String fname);
+
 }

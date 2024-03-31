@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +33,9 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        GridLayout gridLayout = rootView.findViewById(R.id.gridLayout);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        GridLayout gridLayout = view.findViewById(R.id.gridLayout);
 
-        // Sample data for demonstration
         List<Item> itemList = new ArrayList<>();
         try {
             JSONArray jsonArray = JsonUtils.loadJSONArrayFromAsset(this.getContext(), "home_data.json");
@@ -44,7 +45,8 @@ public class HomeFragment extends Fragment {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String text = jsonObject.getString("text");
                     String image = jsonObject.getString("image");
-                    itemList.add(new Item(text, image));
+                    String fragment = jsonObject.getString("fragment");
+                    itemList.add(new Item(text, image,fragment));
                 }
             }
         } catch (JSONException e) {
@@ -63,10 +65,33 @@ public class HomeFragment extends Fragment {
 
             itemView.setOnClickListener(v -> {
                 Toast.makeText(getActivity(), "click event", Toast.LENGTH_SHORT).show();
+                Fragment selectedFragment = null;
+
+                switch (item.getFragment()) {
+                    case "AttendanceFragment":
+                        //selectedFragment = new AttendanceFragment();
+                        break;
+                    case "ActivityFragment":
+                        selectedFragment = new ActivityFragment();
+                        break;
+                    default:
+                        Toast.makeText(getActivity(), "Fragment not found", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+                if (selectedFragment != null) {
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.frame_container, selectedFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    Toast.makeText(getActivity(), "Opening: " + item.getText(), Toast.LENGTH_SHORT).show();
+                }
+
             });
 
             gridLayout.addView(itemView);
         }
-        return rootView;
+        return view;
     }
 }

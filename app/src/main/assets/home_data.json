@@ -2,16 +2,19 @@
   {
     "id" : 1,
     "image" : "checkin",
-    "text" : "Check in"
+    "text" : "Check in",
+    "fragment" : "AttendanceFragment"
   },
   {
     "id" : 2,
     "image" : "activity",
-    "text" : "Activity"
+    "text" : "Activity",
+    "fragment" : "ActivityFragment"
   },
   {
     "id" : 3,
     "image" : "checkout",
-    "text" : "Check out"
+    "text" : "Check out",
+    "fragment" : "AttendanceFragment"
   }
 ]
