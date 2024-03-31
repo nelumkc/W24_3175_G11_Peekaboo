@@ -16,112 +16,107 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
+import com.example.w24_3175_g11_peekaboo.interfaces.ChildDao;
+import com.example.w24_3175_g11_peekaboo.model.Entry;
 import com.example.w24_3175_g11_peekaboo.model.Child;
-import com.example.w24_3175_g11_peekaboo.model.Parent;
-import com.example.w24_3175_g11_peekaboo.model.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+public class ActivityFragment extends Fragment {
 
-public class ChildRegistrationFragment extends Fragment {
-
-   EditText firstNameEdit,lastNameEdit,dobEdit,parentNameEdit,parentEmailEdit;
-   RadioGroup genderGroup;
-   Button registerButton,uploadButton;
     DaycareDatabase daycaredb;
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView profilePic;
+    Spinner spinner;
+
+    Button btnCreateEntry,btnupload;
+    EditText desc,title;
+
+    ImageView imageView;
+
+    String currentImagePath = null;
+
     private ActivityResultLauncher<String> getContent;
-    private String currentImagePath = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_child_registration, container, false);
+        View view = inflater.inflate(R.layout.fragment_activity, container, false);
 
-        firstNameEdit = view.findViewById(R.id.editTextFirstName);
-        lastNameEdit = view.findViewById(R.id.editTextLastName);
-        dobEdit = view.findViewById(R.id.editTextdob);
-        parentNameEdit = view.findViewById(R.id.editTextParentName);
-        parentEmailEdit = view.findViewById(R.id.editTextParentEmail);
-        genderGroup = view.findViewById(R.id.radGroupGender);
-        registerButton = view.findViewById(R.id.btnRegister);
-        uploadButton = view.findViewById(R.id.btnUpload);
-        profilePic = view.findViewById(R.id.picProfile);
+        daycaredb = Room.databaseBuilder(getContext().getApplicationContext(),DaycareDatabase.class,"daycare.db").build();
+        spinner = view.findViewById(R.id.spinnerChild);
+        btnCreateEntry = view.findViewById(R.id.btnCreateEntry);
+        desc = view.findViewById(R.id.editTextDescription);
+        title = view.findViewById(R.id.editTextTitle);
+        btnupload = view.findViewById(R.id.btnUploadImage);
+        imageView = view.findViewById(R.id.imageViewSelectedImage);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
+
+        String imagePath = currentImagePath;
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(new Runnable() {
             @Override
-            public void onClick(View v) {
-                //get all the values
-                String firstName = firstNameEdit.getText().toString().trim();
-                String lastName = lastNameEdit.getText().toString().trim();
-                String dob = dobEdit.getText().toString().trim();
-                String parentName = parentNameEdit.getText().toString().trim();
-                String parentEmail = parentEmailEdit.getText().toString().trim();
-                int selectedId = genderGroup.getCheckedRadioButtonId();
-                RadioButton selectedRadioButton = view.findViewById(selectedId);
-                String gender = selectedRadioButton != null ? selectedRadioButton.getText().toString() : "";
+            public void run() {
+                ChildDao childDao = daycaredb.childDao();
+                List<Child> children = childDao.getAllChildren();
 
-                //profile pic
-                String imagePath = currentImagePath;
+                List<String> childNames = new ArrayList<>();
+                for(Child child : children){
+                    childNames.add(child.getChildFname());
+                }
 
-                daycaredb = Room.databaseBuilder(getContext().getApplicationContext(),DaycareDatabase.class,"daycare.db").build();
-
-                //run seperate thread to create users,parents and children
-                ExecutorService executorService = Executors.newSingleThreadExecutor();
-                executorService.execute(new Runnable() {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        User newUser = new User(parentName, parentEmail, "PARENT", "123");
-                        Long userId = daycaredb.userDao().insertOneUser(newUser);
-
-                        if (userId > 0) {
-                            Parent newParent = new Parent(userId);
-                            long parentId = daycaredb.parentDao().insertOneParent(newParent);
-
-                            if (parentId > 0) {
-                                Child newChild = new Child(firstName, lastName, dob, gender, imagePath, parentId);
-                                daycaredb.childDao().insertOneChild(newChild);
-                                // Update UI on success
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getContext(), "Data Successfully inserted", Toast.LENGTH_SHORT).show();
-                                            getActivity().getSupportFragmentManager().popBackStack();
-                                        }
-                                    });
-                                }
-                            }
-                        }
-
+                        // get child name list to the spinner
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, childNames);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(adapter);
                     }
                 });
-
             }
         });
 
+        btnCreateEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        ChildDao childDao = daycaredb.childDao();
 
-        uploadButton.setOnClickListener(new View.OnClickListener() {
+                        Entry entry = new Entry(desc.getText().toString().trim(),
+                                title.getText().toString().trim(),imagePath,childDao.getChildIdByName(spinner.getSelectedItem().toString()),new Date());
+
+                        //daycaredb .insertOneActivity(activity);
+                        //daycaredb.entryDao().insertOneEntry(entry);
+                    }
+                });
+            }
+        });
+
+        btnupload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getContent.launch("image/*");
             }
         });
+
 
         return view;
     }
@@ -134,7 +129,7 @@ public class ChildRegistrationFragment extends Fragment {
         getContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
             // Handle the returned Uri
             if (uri != null) {
-                profilePic.setImageURI(uri);
+                imageView.setImageURI(uri);
                 currentImagePath = saveUriToInternalStorage(uri);
             }
         });
@@ -182,7 +177,4 @@ public class ChildRegistrationFragment extends Fragment {
         }
         return myPath.getAbsolutePath();
     }
-
-
-
 }
