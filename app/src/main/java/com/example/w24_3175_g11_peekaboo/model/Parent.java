@@ -21,6 +21,18 @@ public class Parent {
     @ColumnInfo(name="parentuserid")
     private long parentUserId;
 
+
+    public String getParentToken() {
+        return parentToken;
+    }
+
+    public void setParentToken(String parentToken) {
+        this.parentToken = parentToken;
+    }
+
+    @ColumnInfo(name="parenttoken")
+    public String parentToken;
+
     public Parent() {
     }
 

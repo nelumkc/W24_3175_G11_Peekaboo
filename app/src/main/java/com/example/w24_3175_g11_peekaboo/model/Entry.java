@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
@@ -12,8 +13,18 @@ import java.util.Date;
                 onDelete = ForeignKey.CASCADE))
 public class Entry {
 
+
+    public long getEntryId() {
+        return entryId;
+    }
+
+    public void setEntryId(long entryId) {
+        this.entryId = entryId;
+    }
+
     @NonNull
     @ColumnInfo(name = "entryid")
+    @PrimaryKey(autoGenerate = true)
     private long entryId;
 
     @ColumnInfo(name = "entrydesc")
@@ -36,26 +47,34 @@ public class Entry {
         this.entryId = entryId;
     }
 
-    public Date getDateOfEntry() {
-        return dateOfEntry;
+    public String getDateOfEntry() {
+        return entryDate;
     }
 
-    public void setDateOfEntry(Date dateOfEntry) {
-        this.dateOfEntry = dateOfEntry;
+    public void setDateOfEntry(String dateOfEntry) {
+        this.entryDate = dateOfEntry;
+    }
+
+    public String getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(String entryDate) {
+        this.entryDate = entryDate;
     }
 
     @ColumnInfo(name="entrydate")
-    private Date dateOfEntry;
+    private String entryDate;
 
     public Entry() {
     }
 
-    public Entry(String activityDesc, String activityTitle, String activityImage, long activityChildId, Date dateOfEntry) {
+    public Entry(String activityDesc, String activityTitle, String activityImage, long activityChildId, String dateOfEntry) {
         this.entryDesc = activityDesc;
         this.entryTitle = activityTitle;
         this.entryImage = activityImage;
         this.entryChildId = activityChildId;
-        this.dateOfEntry = dateOfEntry;
+        this.entryDate = dateOfEntry;
     }
 
     public String getEntryDesc() {

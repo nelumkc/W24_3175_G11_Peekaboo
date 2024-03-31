@@ -26,4 +26,7 @@ public interface ChildDao {
     @Query("SELECT * FROM children WHERE childfname = :fname")
     long getChildIdByName(String fname);
 
+    @Query("SELECT childparentid FROM children WHERE childfname = :fname")
+    long getParentIdByChildfname(String fname);
+
 }
