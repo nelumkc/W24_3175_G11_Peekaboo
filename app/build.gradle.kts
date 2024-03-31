@@ -46,6 +46,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
 
+
     //Firestore
     implementation("com.google.firebase:firebase-firestore")
 
@@ -63,4 +64,5 @@ dependencies {
 
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
 }

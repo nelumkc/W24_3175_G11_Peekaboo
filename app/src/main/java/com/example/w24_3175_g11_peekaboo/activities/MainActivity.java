@@ -1,5 +1,6 @@
 package com.example.w24_3175_g11_peekaboo.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 if (userEmail != null) {
                     Fragment selectedFragment;
                     String roleFromDb = daycaredb.userDao().getUserRoleByEmail(userEmail);
+
                     if(roleFromDb!=null && !roleFromDb.isEmpty()){
                         userRole = roleFromDb;
                         if(userRole.equals("PARENT")){
@@ -79,6 +81,30 @@ public class MainActivity extends AppCompatActivity {
                         });
                         executor.shutdown();
                     }
+                    /*
+                    if(roleFromDb == null || roleFromDb.isEmpty()){
+                        // Role is empty or null, start LoginActivity
+                        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(loginIntent);
+                        finish();
+                        executor.shutdown();
+                        return;
+                    }
+                    // Existing logic to set the userRole and update UI
+                    userRole = roleFromDb;
+                    if(userRole.equals("PARENT")){
+                        selectedFragment = parentHomeFragment;
+                    }else{
+                        selectedFragment = homeFragment;
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,selectedFragment).commit();
+                        }
+                    });
+                    executor.shutdown();
+*/
                 }
             }
         });
@@ -89,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 Fragment selectedFragment = null;
-
+                String role = userRole != null ? userRole : "";
                 if (item.getItemId() == R.id.bottom_home) {
                     selectedFragment = userRole.equals("PARENT") ? parentHomeFragment : homeFragment;
                 } else if (item.getItemId() == R.id.bottom_message) {

@@ -7,8 +7,6 @@ import androidx.room.Query;
 
 import com.example.w24_3175_g11_peekaboo.model.Entry;
 
-import java.io.Serializable;
-
 @Dao
 public interface EntryDao{
     @Insert(onConflict = OnConflictStrategy.IGNORE)
