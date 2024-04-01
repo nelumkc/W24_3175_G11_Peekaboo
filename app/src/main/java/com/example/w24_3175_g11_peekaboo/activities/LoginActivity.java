@@ -63,8 +63,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String ADMIN_ROLE = "ADMIN";
     private static final String ADMIN_PASSWORD = "admin";
 
-    User currentuserS;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,14 +243,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setCurrentUserId(){
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        if(currentUser!=null){
-            editor.putLong("currentUserId",  currentuserS.getUserId());
-        }else{
-            editor.remove("currentUserId");
-        }
-        editor.apply();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Long userId = daycaredb.userDao().getUserIdByEmail(emailEt.getText().toString());
+                if (userId != null) {
+                    // Store the user ID in SharedPreferences on the main thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putLong("currentUserId", userId);
+                            editor.apply();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }

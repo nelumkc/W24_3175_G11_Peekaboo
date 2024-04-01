@@ -59,26 +59,37 @@ public class ParentHomeFragment extends Fragment {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                //long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
-                //long parentId = daycaredb.parentDao().getParentIdByUserId(String.valueOf(currentUserId));
-               // Toast.makeText(getContext(), "paren "+ parentId, Toast.LENGTH_SHORT).show();
-               // List<Entry> entries = daycaredb.entryDao().getEntriesByParentId(parentId);
-                List<Entry> entries = daycaredb.entryDao().getAllEntries();
+                long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
+                getActivity().runOnUiThread(() ->
+                        Toast.makeText(getActivity(), "current user id " + currentUserId, Toast.LENGTH_SHORT).show()
+                );
 
+                if(currentUserId != -1){
+                    long parentId = daycaredb.parentDao().getParentIdByUserId(String.valueOf(currentUserId));
+                    getActivity().runOnUiThread(() ->
+                            Toast.makeText(getActivity(), "paren "+ parentId, Toast.LENGTH_SHORT).show()
+                    );
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (entries.isEmpty()) {
-                            Toast.makeText(getContext(), "No Entry Exists", Toast.LENGTH_SHORT).show();
+                    List<Entry> entries = daycaredb.entryDao().getEntriesByParentId(parentId);
 
-                        } else {
-                            entryList.clear();
-                            entryList.addAll(entries);
-                            adapter.notifyDataSetChanged();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (entries.isEmpty()) {
+                                Toast.makeText(getContext(), "No Entry Exists", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                entryList.clear();
+                                entryList.addAll(entries);
+                                adapter.notifyDataSetChanged();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                //List<Entry> entries = daycaredb.entryDao().getAllEntries();
+
+
+
             }
         });
 
