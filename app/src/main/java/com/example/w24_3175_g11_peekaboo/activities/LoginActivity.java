@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,13 +63,14 @@ public class LoginActivity extends AppCompatActivity {
     private static final String ADMIN_ROLE = "ADMIN";
     private static final String ADMIN_PASSWORD = "admin";
 
+    User currentuserS;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // create admin when first installation
-        //db = new DataBaseHelper(this);
         daycaredb = Room.databaseBuilder(this.getApplicationContext(), DaycareDatabase.class, "daycare.db").build();
 
         checkFirstRunAndCreateAdmin();
@@ -132,7 +134,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (daycaredb.userDao().countUserByRole("ADMIN") == 0) {
-                    User adminUser = new User("admin", ADMIN_EMAIL, ADMIN_ROLE, ADMIN_PASSWORD);
+                    String token =  UUID.randomUUID().toString();
+                    User adminUser = new User("admin", ADMIN_EMAIL, ADMIN_ROLE, ADMIN_PASSWORD, token);
                     daycaredb.userDao().insertUserAdmin(adminUser);
                 }
             }
@@ -153,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             if (user != null) {
                                 setRememberMePreference(rememberMeCheckBox.isChecked());
+                                setCurrentUserId();
                                 navigateToMainActivity();
                             }else {
                                 Toast.makeText(LoginActivity.this,
@@ -238,6 +242,17 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void setCurrentUserId(){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        if(currentUser!=null){
+            editor.putLong("currentUserId",  currentuserS.getUserId());
+        }else{
+            editor.remove("currentUserId");
+        }
+        editor.apply();
     }
 
 }

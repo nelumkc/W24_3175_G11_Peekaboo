@@ -22,15 +22,27 @@ public class User {
     @ColumnInfo(name="userpassword")
     private String userPassword;
 
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
+
+    @ColumnInfo(name="usertoken")
+    public String userToken;
+
     public User() {
     }
 
     @Ignore
-    public User(String userName, String userEmail, String userRole, String userPassword) {
+    public User(String userName, String userEmail, String userRole, String userPassword, String userToken) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userRole = userRole;
         this.userPassword = userPassword;
+        this.userToken = userToken;
     }
 
     public long getUserId() {

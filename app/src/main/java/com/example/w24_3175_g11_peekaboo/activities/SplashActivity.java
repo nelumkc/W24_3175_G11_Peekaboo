@@ -20,8 +20,8 @@ public class SplashActivity extends AppCompatActivity {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                // Start the MainActivity after 3000 milliseconds (3 seconds)
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                // Start the LoginActivity after 3000 milliseconds (3 seconds)
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 finish();
             }
         };

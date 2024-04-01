@@ -15,9 +15,6 @@ public interface ParentDao {
     @Query("SELECT parentId FROM parents WHERE parentUserId = :userId")
     Long getParentIdByUserId(String userId);
 
-    @Query("UPDATE parents SET parenttoken = :token WHERE parentid = :parentId")
-    void updateNotificationToken(int parentId, String token);
-
-    @Query("SELECT parenttoken FROM parents WHERE parentid = :parentId")
-    String getNotificationToken(int parentId);
+    @Query("SELECT parentuserid FROM parents WHERE parentid = :parentId")
+    Long getUserIdByParentId(long parentId);
 }
