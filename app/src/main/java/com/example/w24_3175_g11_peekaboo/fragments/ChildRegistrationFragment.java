@@ -32,6 +32,7 @@ import com.example.w24_3175_g11_peekaboo.model.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -86,7 +87,8 @@ public class ChildRegistrationFragment extends Fragment {
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
-                        User newUser = new User(parentName, parentEmail, "PARENT", "123");
+                        String token =  UUID.randomUUID().toString();
+                        User newUser = new User(parentName, parentEmail, "PARENT", "123", token);
                         Long userId = daycaredb.userDao().insertOneUser(newUser);
 
                         if (userId > 0) {

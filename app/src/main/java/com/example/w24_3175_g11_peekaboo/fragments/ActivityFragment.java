@@ -39,6 +39,7 @@ import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.activities.MainActivity;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.interfaces.ChildDao;
+import com.example.w24_3175_g11_peekaboo.interfaces.ParentDao;
 import com.example.w24_3175_g11_peekaboo.model.Entry;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 
@@ -48,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -131,11 +133,13 @@ public class ActivityFragment extends Fragment {
                     @Override
                     public void run() {
                         ChildDao childDao = daycaredb.childDao();
+                        ParentDao parentDao = daycaredb.parentDao();
+
 
                         Entry entry = new Entry(desc.getText().toString().trim(),
                                 title.getText().toString().trim(), imagePath, childDao.getChildIdByName(spinner.getSelectedItem().toString()), new Date().toString());
 
-                        long parentId = childDao.getParentIdByChildfname(spinner.getSelectedItem().toString());
+                        String token = childDao.getParentUserTokenByChildfname(spinner.getSelectedItem().toString());
 
                         daycaredb.entryDao().insertOneEntry(entry);
                         // Update UI on success
@@ -144,7 +148,7 @@ public class ActivityFragment extends Fragment {
                                 @Override
                                 public void run() {
                                    // Toast.makeText(getContext(), "Data Successfully inserted", Toast.LENGTH_SHORT).show();
-                                    sendPushNotification(title.getText().toString().trim(), desc.getText().toString().trim());
+                                    sendPushNotification(title.getText().toString().trim(), desc.getText().toString().trim(),token);
                                     //getActivity().getSupportFragmentManager().popBackStack();
                                 }
                             });
@@ -222,7 +226,7 @@ public class ActivityFragment extends Fragment {
         return myPath.getAbsolutePath();
     }
 
-    private void sendPushNotification(String textTitle, String textContent) {
+    private void sendPushNotification(String textTitle, String textContent, String token) {
         String CHANNEL_ID = "peekaboo_channel_1";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.peekaboo)
@@ -235,6 +239,7 @@ public class ActivityFragment extends Fragment {
         //
         Intent intent = new Intent(getContext().getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("token", token);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext().getApplicationContext(),
                 0,intent,PendingIntent.FLAG_MUTABLE);
@@ -259,19 +264,6 @@ public class ActivityFragment extends Fragment {
 
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
-/*
-    private void updateParentNotificationToken(String token) {
-        int parentId = getParentId();
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                // Assuming you have a method in your DAO to update the token
-                ParentDao parentDao = daycaredb.parentDao();
-                parentDao.updateNotificationToken(parentId, token);
-            }
-        });
-    }
-*/
+
 
 }

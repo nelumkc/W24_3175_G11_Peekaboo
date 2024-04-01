@@ -29,4 +29,6 @@ public interface ChildDao {
     @Query("SELECT childparentid FROM children WHERE childfname = :fname")
     long getParentIdByChildfname(String fname);
 
+    @Query("SELECT u.usertoken FROM users u INNER JOIN parents p ON u.userId = p.parentuserid INNER JOIN children c ON p.parentId = c.childparentid WHERE c.childfname = :fname")
+    String getParentUserTokenByChildfname(String fname);
 }

@@ -55,9 +55,41 @@ public class MainActivity extends AppCompatActivity {
         //replace container->frame layout with home fragment
         daycaredb = Room.databaseBuilder(this.getApplicationContext(), DaycareDatabase.class, "daycare.db").build();
 
-        userRole = "PARENT"; // DEFAULT
+        //userRole = "PARENT"; // DEFAULT
         String userEmail = getIntent().getStringExtra("userEmail");
 
+        if(userEmail!=null){
+            loadUserFragmentBasedOnRole(userEmail);
+        }
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                Fragment selectedFragment = null;
+                String role = userRole != null ? userRole : "";
+                if(userRole != null){
+                    if (item.getItemId() == R.id.bottom_home) {
+                        selectedFragment = userRole.equals("PARENT") ? parentHomeFragment : homeFragment;
+                    } else if (item.getItemId() == R.id.bottom_message) {
+                        selectedFragment = userRole.equals("PARENT") ? parentMessageFragment : chatFragment;
+                    } else if (item.getItemId() == R.id.bottom_classroom) {
+                        selectedFragment = userRole.equals("PARENT") ? parentClassroomFragment : classroomFragment;
+                    } else if (item.getItemId() == R.id.bottom_more) {
+                        selectedFragment = userRole.equals("PARENT") ? parentMoreFragment : moreFragment;
+                    }
+                }
+
+                if (selectedFragment != null) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, selectedFragment).commit();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
+
+    private void loadUserFragmentBasedOnRole(String userEmail) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {
             @Override
@@ -65,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 if (userEmail != null) {
                     Fragment selectedFragment;
                     String roleFromDb = daycaredb.userDao().getUserRoleByEmail(userEmail);
-
+                    /*
                     if(roleFromDb!=null && !roleFromDb.isEmpty()){
                         userRole = roleFromDb;
                         if(userRole.equals("PARENT")){
@@ -81,7 +113,9 @@ public class MainActivity extends AppCompatActivity {
                         });
                         executor.shutdown();
                     }
-                    /*
+
+                     */
+
                     if(roleFromDb == null || roleFromDb.isEmpty()){
                         // Role is empty or null, start LoginActivity
                         Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -104,35 +138,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     executor.shutdown();
-*/
+
                 }
             }
         });
-
-
-
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                Fragment selectedFragment = null;
-                String role = userRole != null ? userRole : "";
-                if (item.getItemId() == R.id.bottom_home) {
-                    selectedFragment = userRole.equals("PARENT") ? parentHomeFragment : homeFragment;
-                } else if (item.getItemId() == R.id.bottom_message) {
-                    selectedFragment = userRole.equals("PARENT") ? parentMessageFragment : chatFragment;
-                } else if (item.getItemId() == R.id.bottom_classroom) {
-                    selectedFragment = userRole.equals("PARENT") ? parentClassroomFragment : classroomFragment;
-                } else if (item.getItemId() == R.id.bottom_more) {
-                    selectedFragment = userRole.equals("PARENT") ? parentMoreFragment : moreFragment;
-                }
-
-                if (selectedFragment != null) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, selectedFragment).commit();
-                    return true;
-                }
-                return false;
-            }
-        });
-
     }
 }

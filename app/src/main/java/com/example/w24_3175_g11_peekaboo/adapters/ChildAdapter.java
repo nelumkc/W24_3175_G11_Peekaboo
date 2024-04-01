@@ -22,7 +22,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     private ArrayList<Child> children;
 
     private OnItemClickListener onItemClickListener;
-    // A flag to determine the click behavior
     private boolean isChatEnabled;
 
     public ChildAdapter(Context context, ArrayList<Child> children, boolean isChatEnabled, OnItemClickListener listener) {
