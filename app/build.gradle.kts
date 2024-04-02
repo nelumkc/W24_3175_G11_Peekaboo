@@ -64,5 +64,8 @@ dependencies {
 
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+    //smtp
+    implementation ("com.sun.mail:android-mail:1.6.0")
+    implementation ("com.sun.mail:android-activation:1.6.0")
 
 }
