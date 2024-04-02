@@ -1,5 +1,7 @@
 package com.example.w24_3175_g11_peekaboo.fragments;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -32,6 +35,7 @@ import com.example.w24_3175_g11_peekaboo.model.User;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,15 +43,17 @@ import java.util.concurrent.Executors;
 
 public class ChildRegistrationFragment extends Fragment {
 
-   EditText firstNameEdit,lastNameEdit,dobEdit,parentNameEdit,parentEmailEdit;
+   EditText firstNameEdit,lastNameEdit,parentNameEdit,parentEmailEdit;
    RadioGroup genderGroup;
-   Button registerButton,uploadButton;
+   Button registerButton,uploadButton, dateButton;
     DaycareDatabase daycaredb;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView profilePic;
     private ActivityResultLauncher<String> getContent;
     private String currentImagePath = null;
+
+    private DatePickerDialog datePickerDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,13 +62,15 @@ public class ChildRegistrationFragment extends Fragment {
 
         firstNameEdit = view.findViewById(R.id.editTextFirstName);
         lastNameEdit = view.findViewById(R.id.editTextLastName);
-        dobEdit = view.findViewById(R.id.editTextdob);
+        //dobEdit = view.findViewById(R.id.editTextdob);
         parentNameEdit = view.findViewById(R.id.editTextParentName);
         parentEmailEdit = view.findViewById(R.id.editTextParentEmail);
         genderGroup = view.findViewById(R.id.radGroupGender);
         registerButton = view.findViewById(R.id.btnRegister);
         uploadButton = view.findViewById(R.id.btnUpload);
         profilePic = view.findViewById(R.id.picProfile);
+        initDatePicker();
+        dateButton = view.findViewById(R.id.datePickerButton);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +78,8 @@ public class ChildRegistrationFragment extends Fragment {
                 //get all the values
                 String firstName = firstNameEdit.getText().toString().trim();
                 String lastName = lastNameEdit.getText().toString().trim();
-                String dob = dobEdit.getText().toString().trim();
+                //String dob = dobEdit.getText().toString().trim();
+                String dob = dateButton.getText().toString().trim();
                 String parentName = parentNameEdit.getText().toString().trim();
                 String parentEmail = parentEmailEdit.getText().toString().trim();
                 int selectedId = genderGroup.getCheckedRadioButtonId();
@@ -124,6 +133,8 @@ public class ChildRegistrationFragment extends Fragment {
                 getContent.launch("image/*");
             }
         });
+
+        dateButton.setOnClickListener(this::openDatePicker);
 
         return view;
     }
@@ -186,5 +197,31 @@ public class ChildRegistrationFragment extends Fragment {
     }
 
 
+    private void initDatePicker(){
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day,month,year);
+                dateButton.setText(date);
 
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+        datePickerDialog = new DatePickerDialog(getContext(),style,dateSetListener,year,month,day);
+
+    }
+
+    private String makeDateString(int day, int month,int year){
+        return year + "/" + month + "/" + day;
+    }
+    public void openDatePicker(View view) {
+        datePickerDialog.show();
+    }
 }
