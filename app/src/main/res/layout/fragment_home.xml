@@ -11,14 +11,15 @@
 
 
     <GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="30dp"
         android:columnCount="2"
-        android:rowCount="3"
-        android:padding="16dp"/>
-
-
+        android:padding="20dp"
+        android:rowCount="3" />
 
 </FrameLayout>

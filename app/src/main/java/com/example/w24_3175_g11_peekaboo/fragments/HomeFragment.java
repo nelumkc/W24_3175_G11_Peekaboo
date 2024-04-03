@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -66,13 +67,15 @@ public class HomeFragment extends Fragment {
             itemView.setOnClickListener(v -> {
                 Toast.makeText(getActivity(), "click event", Toast.LENGTH_SHORT).show();
                 Fragment selectedFragment = null;
+                String Title = null;
 
                 switch (item.getFragment()) {
                     case "AttendanceFragment":
-                        //selectedFragment = new AttendanceFragment();
+                        selectedFragment = new AttendanceFragment();
                         break;
                     case "ActivityFragment":
                         selectedFragment = new ActivityFragment();
+                        Title = "Activity";
                         break;
                     default:
                         Toast.makeText(getActivity(), "Fragment not found", Toast.LENGTH_SHORT).show();

@@ -71,17 +71,21 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
 
-                    <EditText
-                        android:id="@+id/editTextdob"
-                        android:layout_width="0dp"
+                    <Button
+                        android:id="@+id/datePickerButton"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
+                        android:text="JAN 01 2024"
+                        style="?android:spinnerStyle"
                         android:layout_marginStart="100dp"
                         android:hint="@string/dob_hint"
                         android:inputType="date"
                         android:textSize="20sp"
+                        android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextLastName" />
+                        app:layout_constraintTop_toBottomOf="@+id/editTextLastName"
+                        android:onClick="openDatePicker" />
 
 
 
@@ -93,7 +97,7 @@
                         android:layout_marginTop="16dp"
                         android:text="@string/gender_label"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/editTextdob" />
+                        app:layout_constraintTop_toBottomOf="@id/datePickerButton" />
 
                     <RadioGroup
                         android:id="@+id/radGroupGender"
@@ -103,7 +107,7 @@
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/editTextdob">
+                        app:layout_constraintTop_toBottomOf="@+id/datePickerButton">
 
                             <RadioButton
                                 android:id="@+id/radMale"
