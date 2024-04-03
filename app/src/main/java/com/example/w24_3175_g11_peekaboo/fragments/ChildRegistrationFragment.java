@@ -150,6 +150,7 @@ public class ChildRegistrationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getContent.launch("image/*");
+
             }
         });
 

@@ -4,7 +4,9 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
+import com.example.w24_3175_g11_peekaboo.model.Attendance;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 
 import java.util.List;
@@ -31,4 +33,20 @@ public interface ChildDao {
 
     @Query("SELECT u.usertoken FROM users u INNER JOIN parents p ON u.userId = p.parentuserid INNER JOIN children c ON p.parentId = c.childparentid WHERE c.childfname = :fname")
     String getParentUserTokenByChildfname(String fname);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insertAttendance(Attendance attendance);
+
+    @Update
+    void updateAttendance(Attendance attendance);
+
+    @Query("SELECT * FROM attendance WHERE attchildid = :childId AND attdate = :currentDate LIMIT 1")
+    Attendance getAttendanceForChild(long childId, String currentDate);
+
+
+    @Query("SELECT COUNT(*) FROM Attendance WHERE attdate = :currentDate AND ispresent = 1")
+    int countPresentChildren(String currentDate);
+
+    @Query("SELECT COUNT(*) FROM Attendance WHERE attdate = :currentDate AND ispresent = 0")
+    int countAbsentChildren(String currentDate);
 }

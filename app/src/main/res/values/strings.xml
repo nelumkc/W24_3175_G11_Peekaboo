@@ -83,4 +83,12 @@
 
     <string name="channel_name">Peekaboo</string>
     <string name="channel_description">Peekaboo_daycare</string>
+
+    <string-array name="absent_reasons">
+        <item>Sick</item>
+        <item>Vacation</item>
+        <item>No-show</item>
+        <item>Home day</item>
+        <item>Appointment</item>
+    </string-array>
 </resources>

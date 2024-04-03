@@ -4,4 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="GreenColor">#077983</color>
     <color name="buttonColor">#077983</color>
+    <color name="LightGreenColor">#3399a3</color>
+    <color name="red">#FF0000</color>
+    <color name="grey">#808080</color>
 </resources>
