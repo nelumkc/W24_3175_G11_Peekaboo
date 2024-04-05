@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -11,7 +12,8 @@ import java.util.Date;
 
 @Entity(tableName = "entries",
         foreignKeys = @ForeignKey(entity = Child.class,parentColumns ="childid",childColumns = "entrychildid",
-                onDelete = ForeignKey.CASCADE))
+                onDelete = ForeignKey.CASCADE), indices = {@Index(value = {"entrychildid"})}
+       )
 public class Entry implements Serializable {
 
 

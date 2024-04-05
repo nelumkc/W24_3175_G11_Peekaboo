@@ -1,8 +1,15 @@
 package com.example.w24_3175_g11_peekaboo.fragments;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,11 +23,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.w24_3175_g11_peekaboo.R;
+import com.example.w24_3175_g11_peekaboo.activities.MainActivity;
 import com.example.w24_3175_g11_peekaboo.adapters.ChildAdapter;
 import com.example.w24_3175_g11_peekaboo.adapters.EntryAdapter;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 import com.example.w24_3175_g11_peekaboo.model.Entry;
+import com.example.w24_3175_g11_peekaboo.model.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +58,21 @@ public class ParentHomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        displayData();
+        long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
+
+        displayData(currentUserId);
+
+        sendPushNotification(currentUserId);
 
         return view;
     }
 
-    private void displayData() {
+    private void displayData(long currentUserId) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
+                //long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
                 getActivity().runOnUiThread(() ->
                         Toast.makeText(getActivity(), "current user id " + currentUserId, Toast.LENGTH_SHORT).show()
                 );
@@ -86,9 +99,6 @@ public class ParentHomeFragment extends Fragment {
                         }
                     });
                 }
-                //List<Entry> entries = daycaredb.entryDao().getAllEntries();
-
-
 
             }
         });
@@ -106,5 +116,67 @@ public class ParentHomeFragment extends Fragment {
         transaction.replace(R.id.frame_container, childProfileFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void sendPushNotification(long currentUserId) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Notification> notificationList = daycaredb.notificationDao().getNotificationDetailsByUser(String.valueOf(currentUserId));
+
+                String CHANNEL_ID = "peekaboo_channel_1";
+                NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+                //create channel
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel notificationChannel =
+                            notificationManager.getNotificationChannel(CHANNEL_ID);
+                    if(notificationChannel == null){
+                        int importance = NotificationManager.IMPORTANCE_HIGH;
+                        notificationChannel = new NotificationChannel(CHANNEL_ID,
+                                "Notifications" , importance);
+                        notificationChannel.setLightColor(Color.GREEN);
+                        notificationChannel.enableVibration(true);
+                        notificationChannel.setShowBadge(true);
+                        notificationManager.createNotificationChannel(notificationChannel);
+                    }
+                }
+
+                final int[] notificationId = {0};
+                for(Notification notification:notificationList){
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+                            .setSmallIcon(R.drawable.peekaboo)
+                            .setContentTitle(notification.getNotTitle())
+                            .setContentText("Test content")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    builder.setAutoCancel(true)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    Intent intent = new Intent(getContext().getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //intent.putExtra("token", token);
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext().getApplicationContext(),
+                            0,intent,PendingIntent.FLAG_MUTABLE);
+                    builder.setContentIntent(pendingIntent);
+
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                final int id = notificationId[0]++;
+                                notificationManager.notify(id, builder.build());
+                                daycaredb.notificationDao().updateNotification(notification.getNotId());
+                            }
+                        });
+
+                    }
+
+                }
+
+            }
+        });
+
     }
 }

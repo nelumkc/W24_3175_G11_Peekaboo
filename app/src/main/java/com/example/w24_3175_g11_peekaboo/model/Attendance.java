@@ -8,7 +8,8 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "attendance",
-        foreignKeys = @ForeignKey(entity = Child.class,parentColumns = "childid",childColumns = "attchildid",onDelete = ForeignKey.CASCADE)
+        foreignKeys = @ForeignKey(entity = Child.class,parentColumns = "childid",childColumns = "attchildid",onDelete = ForeignKey.CASCADE),
+        indices = {@Index(value = {"attchildid"})}
 )
 public class Attendance {
     @NonNull
