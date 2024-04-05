@@ -46,6 +46,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
 
+    implementation("com.synnapps:carouselview:0.1.5")
+    //slidshow
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.0")
+
 
     //Firestore
     implementation("com.google.firebase:firebase-firestore")
