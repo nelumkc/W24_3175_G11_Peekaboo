@@ -42,6 +42,7 @@ import com.example.w24_3175_g11_peekaboo.interfaces.ChildDao;
 import com.example.w24_3175_g11_peekaboo.interfaces.ParentDao;
 import com.example.w24_3175_g11_peekaboo.model.Entry;
 import com.example.w24_3175_g11_peekaboo.model.Child;
+import com.example.w24_3175_g11_peekaboo.model.Notification;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -139,17 +140,24 @@ public class ActivityFragment extends Fragment {
                         Entry entry = new Entry(desc.getText().toString().trim(),
                                 title.getText().toString().trim(), imagePath, childDao.getChildIdByName(spinner.getSelectedItem().toString()), new Date().toString());
 
-                        String token = childDao.getParentUserTokenByChildfname(spinner.getSelectedItem().toString());
+                       // String token = childDao.getParentUserTokenByChildfname(spinner.getSelectedItem().toString());
 
-                        daycaredb.entryDao().insertOneEntry(entry);
+                        long entryid = daycaredb.entryDao().insertOneEntry(entry);
+                        if(entryid!= -1){
+                            Notification notification = new Notification(title.getText().toString().trim()
+                                    ,childDao.getChildIdByName(spinner.getSelectedItem().toString()), entryid, false );
+                            daycaredb.notificationDao().insertOneNotification(notification);
+                        }
+
+
                         // Update UI on success
                         if (getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                   // Toast.makeText(getContext(), "Data Successfully inserted", Toast.LENGTH_SHORT).show();
-                                    sendPushNotification(title.getText().toString().trim(), desc.getText().toString().trim(),token);
-                                    //getActivity().getSupportFragmentManager().popBackStack();
+                                    //sendPushNotification(title.getText().toString().trim(), desc.getText().toString().trim(),token);
+                                    //create notification
+                                    Toast.makeText(getActivity(), "Entry created", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
