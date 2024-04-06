@@ -67,5 +67,11 @@ dependencies {
     //smtp
     implementation ("com.sun.mail:android-mail:1.6.0")
     implementation ("com.sun.mail:android-activation:1.6.0")
+    //image slider
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
+    // dependency for loading image from url
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    //for pie chart
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

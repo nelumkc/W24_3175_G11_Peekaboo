@@ -22,4 +22,7 @@ public interface EntryDao{
 
     @Query("SELECT * FROM entries")
     List<Entry> getAllEntries();
+
+    @Query("SELECT * FROM entries WHERE entrychildid IN (SELECT childId FROM children WHERE childparentid = :parentId) ORDER BY entryid DESC LIMIT 4")
+    List<Entry> getLatestFourEntriesByParentId(long parentId);
 }
