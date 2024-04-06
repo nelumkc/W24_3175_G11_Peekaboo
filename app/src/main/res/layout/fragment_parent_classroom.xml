@@ -3,18 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ParentClassroomFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/image_slider"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:layout_marginTop="50dp"
+            app:iss_auto_cycle="true"
+            app:iss_delay="1000"
+            app:iss_period="1000"
+            app:iss_text_align="CENTER" />
 
+
+    </RelativeLayout>
 </FrameLayout>
