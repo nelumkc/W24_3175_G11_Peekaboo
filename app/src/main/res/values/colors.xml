@@ -3,8 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="GreenColor">#077983</color>
-    <color name="buttonColor">#077983</color>
-    <color name="LightGreenColor">#3399a3</color>
+    <color name="buttonColor">#5cb3c4</color>
+    <color name="LightGreenColor">#72c4d4</color>
     <color name="red">#FF0000</color>
-    <color name="grey">#808080</color>
+    <color name="inputTextColor">#808080</color>
+    <color name="labelColor">#3b3b3b</color>
+
+    <color name="headingColor">#5cb3c4</color>
+
+
+
 </resources>

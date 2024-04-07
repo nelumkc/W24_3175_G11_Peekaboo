@@ -1,7 +1,5 @@
 package com.example.w24_3175_g11_peekaboo.adapters;
 
-import static java.security.AccessController.getContext;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,12 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
-import com.example.w24_3175_g11_peekaboo.fragments.AttendanceFragment;
 import com.example.w24_3175_g11_peekaboo.model.Attendance;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 import com.squareup.picasso.Picasso;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -75,7 +70,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
                         // Child has checked out
                         holder.attendanceButton.setText("Checked Out");
                         holder.textViewAttLabel.setText("");
-                        holder.attendanceButton.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        holder.attendanceButton.setBackgroundColor(ContextCompat.getColor(context, R.color.inputTextColor));
                         holder.attendanceButton.setEnabled(false);
                     } else {
                         // Child has checked in but not checked out
@@ -133,7 +128,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
                             ((Activity)context).runOnUiThread(() -> {
                                 holder.attendanceButton.setText("Checked Out");
                                 holder.textViewAttLabel.setText("");
-                                holder.attendanceButton.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                                holder.attendanceButton.setBackgroundColor(ContextCompat.getColor(context, R.color.inputTextColor));
                                 holder.attendanceButton.setEnabled(false); // Optionally disable the button after check-out
                             });
                         }
