@@ -70,4 +70,9 @@ dependencies {
     //Live streaming
     implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
 
+    //image slider
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
+    // dependency for loading image from url
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+
 }
