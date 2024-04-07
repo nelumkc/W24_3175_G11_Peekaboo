@@ -11,20 +11,18 @@
         android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="50dp"
-            android:layout_marginEnd="24dp"
-            android:text="Get Started"
-            android:textAllCaps="true"
-            android:textColor="#0B60B0"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_background"
+            android:text="@string/btnLogout"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -32,20 +30,23 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
             android:hint="Live ID"
-            app:boxStrokeColor="@color/black"
+            android:textSize="16sp"
+            android:ems="10"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2">
+            app:layout_constraintTop_toBottomOf="@+id/btnLogout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtLiveId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:singleLine="true"
+
+                android:ems="10"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -57,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="24dp"
             android:hint="Name"
+            android:layout_marginEnd="20dp"
             app:boxStrokeColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,32 +70,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:singleLine="true"
+
+                android:ems="10"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnStartLive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="24dp"
-            android:backgroundTint="#0B60B0"
             android:text="Start Live"
             android:padding="5dp"
+            android:background="@drawable/button_background"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btnLogout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnStartLive" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
