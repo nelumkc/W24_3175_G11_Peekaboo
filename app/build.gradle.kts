@@ -67,5 +67,7 @@ dependencies {
     //smtp
     implementation ("com.sun.mail:android-mail:1.6.0")
     implementation ("com.sun.mail:android-activation:1.6.0")
+    //Live streaming
+    implementation ("com.github.ZEGOCLOUD:zego_uikit_prebuilt_live_streaming_android:+")
 
 }
