@@ -22,6 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.activities.MainActivity;
 import com.example.w24_3175_g11_peekaboo.adapters.ChildAdapter;
@@ -63,6 +66,32 @@ public class ParentHomeFragment extends Fragment {
         displayData(currentUserId);
 
         sendPushNotification(currentUserId);
+
+        //adding the image slider
+        ImageSlider imageSlider = view.findViewById(R.id.image_slider);
+
+        daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
+
+        getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
+        long parentId = daycaredb.parentDao().getParentIdByUserId(String.valueOf(currentUserId));
+        //entries by parent id
+        List<Entry> entries = daycaredb.entryDao().getEntriesByParentId(parentId);
+
+        // define new list
+        // push latest 4 entries in to the new list
+        // iterate new list instead of existing one
+
+        ArrayList<SlideModel> imageList = new ArrayList<>();
+
+        String placeholderUrl = "https://example.com/placeholder.png";
+        for (Entry entry : entries) {
+            String imageUrl = entry.getEntryImage();
+            if (imageUrl == null || imageUrl.isEmpty()) {
+                imageUrl = placeholderUrl; // Use placeholder image
+            }
+            imageList.add(new SlideModel(imageUrl, entry.getEntryTitle(), ScaleTypes.FIT));
+        }
+        imageSlider.setImageList(imageList,ScaleTypes.CENTER_CROP);//ending image slider
 
         return view;
     }

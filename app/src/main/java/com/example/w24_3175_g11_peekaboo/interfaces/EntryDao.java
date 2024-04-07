@@ -22,4 +22,5 @@ public interface EntryDao{
 
     @Query("SELECT * FROM entries")
     List<Entry> getAllEntries();
+
 }
