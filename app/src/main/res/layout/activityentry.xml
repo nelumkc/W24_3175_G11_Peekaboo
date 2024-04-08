@@ -6,55 +6,53 @@
     app:cardElevation="12dp"
     app:cardCornerRadius="4dp"
     android:layout_margin="1dp"
-    android:backgroundTint="#ffffff">
+    >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:orientation="horizontal"
         android:padding="3dp">
 
         <ImageView
             android:id="@+id/entryImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:contentDescription="Activity image"
+            android:background="@android:color/darker_gray"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
             android:orientation="vertical"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp">
+            android:paddingStart="8dp"
+            android:layout_alignBottom="@id/entryImage">
 
 
             <TextView
                 android:id="@+id/textTitle"
+                style="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize = "16dp"
                 android:text="Title"
                 android:textColor="#808080"
-                style="bold"/>
+                android:textSize="16dp" />
+
             <TextView
                 android:id="@+id/textdesc"
+                style="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize = "16dp"
                 android:text="Desc"
                 android:textColor="#808080"
-                style="bold"/>
+                android:textSize="16dp" />
 
         </LinearLayout>
 
 
-
-
-    </LinearLayout>
-
+    </RelativeLayout>
 
 
 </androidx.cardview.widget.CardView>
