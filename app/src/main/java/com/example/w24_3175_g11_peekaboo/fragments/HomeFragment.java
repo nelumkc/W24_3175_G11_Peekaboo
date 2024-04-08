@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
             textView.setText(item.getText());
 
             itemView.setOnClickListener(v -> {
-                Toast.makeText(getActivity(), "click event", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "click event", Toast.LENGTH_SHORT).show();
                 Fragment selectedFragment = null;
                 String Title = null;
 
@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment {
                     transaction.replace(R.id.frame_container, selectedFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
-                    Toast.makeText(getActivity(), "Opening: " + item.getText(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Opening: " + item.getText(), Toast.LENGTH_SHORT).show();
                 }
 
             });

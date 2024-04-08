@@ -15,13 +15,23 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.w24_3175_g11_peekaboo.R;
+import com.example.w24_3175_g11_peekaboo.activities.LiveActivity;
 import com.example.w24_3175_g11_peekaboo.activities.LoginActivity;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.UUID;
 
 
 public class ParentMoreFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
+
+    Button btnStartNewLive;
+    TextInputEditText editLiveId;
+
+    String userId;
+    String liveId="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +43,9 @@ public class ParentMoreFragment extends Fragment {
         Button logoutButton = view.findViewById(R.id.btnLogout);
         Button directionButton = view.findViewById(R.id.btnDaycareDirection);
         Button makepayButton = view.findViewById(R.id.btnMakePayment);
+
+        btnStartNewLive = view.findViewById(R.id.btnStartLive);
+        editLiveId = view.findViewById(R.id.edtLiveId);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +85,19 @@ public class ParentMoreFragment extends Fragment {
             }
         });
 
+        btnStartNewLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                liveId = editLiveId.getText().toString();
+                if(liveId.isEmpty()){
+                    editLiveId.setError("Live Id is Required");
+                    editLiveId.requestFocus();
+                    return;
+                }
+                startMeeting();
+            }
+        });
+
         return view;
     }
 
@@ -80,5 +106,15 @@ public class ParentMoreFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(LoginActivity.PREF_REMEMBER_ME);
         editor.apply();
+    }
+
+    void startMeeting(){
+         userId = UUID.randomUUID().toString();
+            Intent intent = new Intent(getActivity(), LiveActivity.class);
+            intent.putExtra("user_id",userId);
+            intent.putExtra("name","Parent");
+            intent.putExtra("live_id",liveId);
+            intent.putExtra("host",false);
+            startActivity(intent);
     }
 }
