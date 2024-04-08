@@ -69,6 +69,7 @@ public class LiveActivity extends AppCompatActivity {
     }
 
     void addFragment(){
+        Toast.makeText(this, "Host"+ isHost, Toast.LENGTH_SHORT).show();
         ZegoUIKitPrebuiltLiveStreamingConfig config;
         if(isHost){
             config = ZegoUIKitPrebuiltLiveStreamingConfig.host();

@@ -11,7 +11,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dp">
+        android:padding="3dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
 
         <ImageView
             android:id="@+id/entryImage"
@@ -37,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textColor="#808080"
+                android:textColor="#ffffff"
                 android:textSize="16dp" />
 
             <TextView
@@ -46,13 +48,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Desc"
-                android:textColor="#808080"
+                android:textColor="#ffffff"
                 android:textSize="16dp" />
 
         </LinearLayout>
 
 
+
+
     </RelativeLayout>
+    <TextView
+        android:id="@+id/textTitleEntry"
+        style="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Look what I'm doing today"
+        android:textColor="@color/labelColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="3dp"
+        android:layout_below="@id/entryImage"/>
 
 
 </androidx.cardview.widget.CardView>

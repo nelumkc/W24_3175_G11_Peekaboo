@@ -188,13 +188,12 @@ public class ActivityFragment extends Fragment {
             if (uri != null) {
                 imageView.setImageURI(uri);
                 uploadImageToFirebase(uri);
-                //currentImagePath = saveUriToInternalStorage(uri);
             }
         });
     }
 
     private void uploadImageToFirebase(Uri uri) {
-        Toast.makeText(getActivity(), "uploadimage", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "uploadimage", Toast.LENGTH_SHORT).show();
         String fileName = System.currentTimeMillis() + "." + getFileExtension(uri);
         StorageReference fileRef = storageReference.child("images/" + fileName);
         fileRef.putFile(uri)
