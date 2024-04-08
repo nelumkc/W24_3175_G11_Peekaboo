@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.model.Attendance;
@@ -52,7 +53,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
         holder.textViewName.setText(child.getChildFname());
 
         if(child.getChildImage()!=null){
-            Picasso.get().load(new File(child.getChildImage())).into(holder.profileImageView);
+            Glide.with(context).load(child.getChildImage()).into(holder.profileImageView);
         }
 
 
@@ -133,8 +134,6 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
                             });
                         }
 
-
-
                     }
                 });
             }
@@ -147,7 +146,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
     }
 
     public static class AttendanceViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewName, textViewAttLabel;
+        TextView textViewName, textViewAttLabel, presentCount, absentCount;
         ImageView profileImageView;
 
         Button attendanceButton;
@@ -158,6 +157,7 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.At
             profileImageView = itemView.findViewById(R.id.childImage);
             attendanceButton = itemView.findViewById(R.id.attendanceButton);
             textViewAttLabel = itemView.findViewById(R.id.attendanceLabel);
+
         }
     }
 
