@@ -2,6 +2,7 @@ package com.example.w24_3175_g11_peekaboo.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,6 +33,10 @@ import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 import com.example.w24_3175_g11_peekaboo.model.Parent;
 import com.example.w24_3175_g11_peekaboo.model.User;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,6 +75,10 @@ public class ChildRegistrationFragment extends Fragment {
 
    private String parentEmail;
 
+    private Uri imageUrl;
+    final private DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Images");
+    final private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,7 +112,7 @@ public class ChildRegistrationFragment extends Fragment {
                 String gender = selectedRadioButton != null ? selectedRadioButton.getText().toString() : "";
 
                 //profile pic
-                String imagePath = currentImagePath;
+                //String imagePath = currentImagePath;
 
                 daycaredb = Room.databaseBuilder(getContext().getApplicationContext(),DaycareDatabase.class,"daycare.db").build();
 
@@ -120,14 +130,14 @@ public class ChildRegistrationFragment extends Fragment {
                             long parentId = daycaredb.parentDao().insertOneParent(newParent);
 
                             if (parentId > 0) {
-                                Child newChild = new Child(firstName, lastName, dob, gender, imagePath, parentId);
+                                Child newChild = new Child(firstName, lastName, dob, gender, imageUrl.toString(), parentId);
                                 daycaredb.childDao().insertOneChild(newChild);
                                 // Update UI on success
                                 if (getActivity() != null) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getContext(), "Data Successfully inserted", Toast.LENGTH_SHORT).show();
+                                           // Toast.makeText(getContext(), "Data Successfully inserted", Toast.LENGTH_SHORT).show();
                                             //send email
                                             sendEmail();
                                             getActivity().getSupportFragmentManager().popBackStack();
@@ -168,52 +178,44 @@ public class ChildRegistrationFragment extends Fragment {
             // Handle the returned Uri
             if (uri != null) {
                 profilePic.setImageURI(uri);
-                currentImagePath = saveUriToInternalStorage(uri);
+                uploadImageToFirebase(uri);
             }
         });
     }
 
-    private String saveUriToInternalStorage(Uri imageUri) {
-        try {
-            Bitmap bitmap;
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P){
-                ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), imageUri);
-                bitmap = ImageDecoder.decodeBitmap(source);
-            }else{
-                bitmap =  MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-            }
-            String imageName = "childImage_" + System.currentTimeMillis() + ".png";
-            return saveToInternalStorage(bitmap, imageName);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private void uploadImageToFirebase(Uri uri) {
+        Toast.makeText(getActivity(), "uploadimage", Toast.LENGTH_SHORT).show();
+        String fileName = System.currentTimeMillis() + "." + getFileExtension(uri);
+        StorageReference fileRef = storageReference.child("images/" + fileName);
+        fileRef.putFile(uri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // After successfully uploading, get the download URL
+                    fileRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        // Here you get the image URI, which you can store in Firebase Realtime Database
+                        String imageUri = downloadUri.toString();
+                        imageUrl = downloadUri;
+                        // Store this URI in Firebase Realtime Database under the "Images" node
+                        String uploadId = databaseReference.push().getKey(); // Generates a unique id for the entry
+                        databaseReference.child(uploadId).setValue(imageUri)
+                                .addOnSuccessListener(aVoid -> {
+                                    //Toast.makeText(getActivity(), "Image uploaded and URI saved successfully", Toast.LENGTH_LONG).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    //Toast.makeText(getActivity(), "Failed to save URI: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                });
+                    }).addOnFailureListener(e -> {
+                        //Toast.makeText(getActivity(), "Failed to upload image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    //Toast.makeText(getActivity(), "Failed to upload image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage, String imageName) {
-        ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
-        // directory path to /data/data/peekaboo/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File myPath = new File(directory, imageName);
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            // compress method on the Bitmap object to write the image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return myPath.getAbsolutePath();
+    private String getFileExtension(Uri fileUri){
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(fileUri));
     }
 
 

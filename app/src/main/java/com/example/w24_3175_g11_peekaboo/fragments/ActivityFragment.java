@@ -1,16 +1,15 @@
 package com.example.w24_3175_g11_peekaboo.fragments;
 
+
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,15 +18,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,10 +41,11 @@ import com.example.w24_3175_g11_peekaboo.interfaces.ParentDao;
 import com.example.w24_3175_g11_peekaboo.model.Entry;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 import com.example.w24_3175_g11_peekaboo.model.Notification;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +68,9 @@ public class ActivityFragment extends Fragment {
 
     private ActivityResultLauncher<String> getContent;
 
+    private Uri imageUrl;
+    final private DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Images");
+    final private StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
 
     private static final int NOTIFICATION_ID = 7777;
@@ -135,10 +137,10 @@ public class ActivityFragment extends Fragment {
                     public void run() {
                         ChildDao childDao = daycaredb.childDao();
                         ParentDao parentDao = daycaredb.parentDao();
-                        String imagePath = currentImagePath;
+                        //String imagePath = currentImagePath;
 
                         Entry entry = new Entry(desc.getText().toString().trim(),
-                                title.getText().toString().trim(), imagePath, childDao.getChildIdByName(spinner.getSelectedItem().toString()), new Date().toString());
+                                title.getText().toString().trim(), imageUrl.toString(), childDao.getChildIdByName(spinner.getSelectedItem().toString()), new Date().toString());
 
                        // String token = childDao.getParentUserTokenByChildfname(spinner.getSelectedItem().toString());
 
@@ -155,8 +157,7 @@ public class ActivityFragment extends Fragment {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //sendPushNotification(title.getText().toString().trim(), desc.getText().toString().trim(),token);
-                                    //create notification
+
                                     Toast.makeText(getActivity(), "Entry created", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -186,53 +187,51 @@ public class ActivityFragment extends Fragment {
             // Handle the returned Uri
             if (uri != null) {
                 imageView.setImageURI(uri);
-                currentImagePath = saveUriToInternalStorage(uri);
+                uploadImageToFirebase(uri);
+                //currentImagePath = saveUriToInternalStorage(uri);
             }
         });
     }
 
-    private String saveUriToInternalStorage(Uri imageUri) {
-        try {
-            Bitmap bitmap;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), imageUri);
-                bitmap = ImageDecoder.decodeBitmap(source);
-            } else {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-            }
-            String imageName = "activityImage_" + System.currentTimeMillis() + ".png";
-            return saveToInternalStorage(bitmap, imageName);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private void uploadImageToFirebase(Uri uri) {
+        Toast.makeText(getActivity(), "uploadimage", Toast.LENGTH_SHORT).show();
+        String fileName = System.currentTimeMillis() + "." + getFileExtension(uri);
+        StorageReference fileRef = storageReference.child("images/" + fileName);
+        fileRef.putFile(uri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // After successfully uploading, get the download URL
+                    fileRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        // Here you get the image URI, which you can store in Firebase Realtime Database
+                        String imageUri = downloadUri.toString();
+                        imageUrl = downloadUri;
+                        // Store this URI in Firebase Realtime Database under the "Images" node
+                        String uploadId = databaseReference.push().getKey(); // Generates a unique id for the entry
+                        databaseReference.child(uploadId).setValue(imageUri)
+                                .addOnSuccessListener(aVoid -> {
+                                    //Toast.makeText(getActivity(), "Image uploaded and URI saved successfully", Toast.LENGTH_LONG).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    //Toast.makeText(getActivity(), "Failed to save URI: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                });
+                    }).addOnFailureListener(e -> {
+                       // Toast.makeText(getActivity(), "Failed to upload image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    //Toast.makeText(getActivity(), "Failed to upload image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage, String imageName) {
-        ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
-        // directory path to /data/data/peekaboo/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File myPath = new File(directory, imageName);
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            // compress method on the Bitmap object to write the image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return myPath.getAbsolutePath();
+    private String getFileExtension(Uri fileUri){
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(fileUri));
     }
+
+
+
+
+
 
     private void sendPushNotification(String textTitle, String textContent, String token) {
         String CHANNEL_ID = "peekaboo_channel_1";

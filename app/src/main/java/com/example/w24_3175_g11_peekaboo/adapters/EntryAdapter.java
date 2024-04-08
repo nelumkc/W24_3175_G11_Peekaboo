@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 import com.example.w24_3175_g11_peekaboo.model.Entry;
@@ -46,7 +47,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             holder.textViewDesc.setText(entry.getEntryDesc());
         }
         if(entry.getEntryImage()!=null){
-            Picasso.get().load(new File(entry.getEntryImage())).into(holder.entryImageView);
+            Glide.with(context).load(entry.getEntryImage()).into(holder.entryImageView);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
