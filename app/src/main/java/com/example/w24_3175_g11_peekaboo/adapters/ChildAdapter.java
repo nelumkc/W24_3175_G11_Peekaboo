@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 import com.squareup.picasso.Picasso;
@@ -41,12 +42,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
     @Override
     public void onBindViewHolder(@NonNull ChildViewHolder holder, int position) {
         Child child = children.get(position);
-        holder.textViewName.setText(child.getChildFname());
+        holder.textViewName.setText(child.getChildFname() + " " + child.getChildLname());
         if(child.getChildDob()!=null){
             holder.textViewDob.setText(child.getChildDob());
         }
         if(child.getChildImage()!=null){
-            Picasso.get().load(new File(child.getChildImage())).into(holder.profileImageView);
+            Glide.with(context).load(child.getChildImage()).into(holder.profileImageView);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
