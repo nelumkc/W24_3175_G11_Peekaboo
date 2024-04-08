@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
-        android:padding="16dp">
+        android:padding="1dp">
 
         <LinearLayout
             android:id="@+id/attendanceHeader"
@@ -24,8 +24,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Present: 0"
-                android:textSize="18sp" />
+                android:textColor="@color/labelColor"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:text="Present: 0" />
 
             <TextView
                 android:id="@+id/totalAbsent"
@@ -33,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Absent: 0"
-                android:textSize="18sp" />
+                android:padding="10dp"
+                android:textColor="@color/labelColor"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/dateDisplay"
@@ -41,14 +45,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
+                android:textColor="@color/labelColor"
+                android:textSize="16sp"
+                android:padding="10dp"
                 android:text="Wed, Jun 21"
-                android:textSize="18sp" />
+                />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewAttendance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_below="@id/attendanceHeader"
             android:dividerHeight="1dp" >
 

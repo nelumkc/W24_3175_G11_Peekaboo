@@ -87,6 +87,7 @@ public class ParentHomeFragment extends Fragment {
         for (Entry entry : entries) {
             String imageUrl = entry.getEntryImage();
             if (imageUrl == null || imageUrl.isEmpty()) {
+                //Toast.makeText(getContext(), "Image url " + entry.getEntryImage(), Toast.LENGTH_SHORT).show();
                 imageUrl = placeholderUrl; // Use placeholder image
             }
             imageList.add(new SlideModel(imageUrl, entry.getEntryTitle(), ScaleTypes.FIT));

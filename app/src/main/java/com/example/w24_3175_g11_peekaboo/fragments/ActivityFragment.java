@@ -101,7 +101,7 @@ public class ActivityFragment extends Fragment {
         //
 
 
-        String imagePath = currentImagePath;
+
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(new Runnable() {
@@ -135,7 +135,7 @@ public class ActivityFragment extends Fragment {
                     public void run() {
                         ChildDao childDao = daycaredb.childDao();
                         ParentDao parentDao = daycaredb.parentDao();
-
+                        String imagePath = currentImagePath;
 
                         Entry entry = new Entry(desc.getText().toString().trim(),
                                 title.getText().toString().trim(), imagePath, childDao.getChildIdByName(spinner.getSelectedItem().toString()), new Date().toString());
@@ -200,7 +200,7 @@ public class ActivityFragment extends Fragment {
             } else {
                 bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
             }
-            String imageName = "childImage_" + System.currentTimeMillis() + ".png";
+            String imageName = "activityImage_" + System.currentTimeMillis() + ".png";
             return saveToInternalStorage(bitmap, imageName);
         } catch (IOException e) {
             e.printStackTrace();

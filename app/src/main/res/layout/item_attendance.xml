@@ -2,17 +2,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    android:layout_margin="1dp"
+    app:cardCornerRadius="1dp"
     app:cardElevation="4dp">
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:orientation="horizontal"
-    android:padding="16dp"
+    android:padding="4dp"
     android:gravity="center_vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/childImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_profile"
+        app:shapeAppearanceOverlay="@style/CircularImageView"
+        android:padding="0dp"
+        />
 
     <TextView
         android:id="@+id/childName"
@@ -23,11 +33,7 @@
         android:text="Child Name"
         android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/childImage"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-         />
+
 
 
     <TextView
@@ -39,13 +45,16 @@
         android:text="Not Present"
         android:textColor="@android:color/holo_red_dark" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/attendanceButton"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Check in"
         android:layout_marginEnd="16dp"
-        android:drawableStart="@drawable/ic_check"
+        android:text="Check in"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:textAllCaps="false"
+        android:background="@drawable/button_background"
         android:drawablePadding="8dp"
         />
 
