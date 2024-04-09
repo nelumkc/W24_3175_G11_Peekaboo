@@ -7,51 +7,54 @@
 
     <EditText
         android:id="@+id/editTextSourceLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         android:ems="10"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:hint="@string/hintsourceLocation"
         android:inputType="text"
+        android:textColor="@color/labelColor"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.661"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TextViewMapTitle" />
-
-    <TextView
-        android:id="@+id/TextViewMapTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="180dp"
-        android:fontFamily="serif"
-        android:text="@string/txtViewMapTitle"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/BtnOpenNavigation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/BtnOpenNavigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.635"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDestinationLocation" />
-
     <EditText
         android:id="@+id/editTextDestinationLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/HintDestinationLocation"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.661"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSourceLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSourceLocation"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/labelColor"
+        android:textSize="16sp"
+        android:hint="@string/HintDestinationLocation"
+        android:background="@drawable/edittext_background"
+        android:inputType="text"
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="288dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/BtnOpenNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDestinationLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/BtnOpenNavigation"
+        android:textSize="16sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="#ffffff"
+        android:textAllCaps="false"
+        android:background="@drawable/button_background"
+        tools:layout_editor_absoluteX="119dp"
+        tools:layout_editor_absoluteY="391dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
