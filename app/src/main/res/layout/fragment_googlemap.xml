@@ -19,6 +19,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:padding="5dp"
         android:background="@drawable/edittext_background"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +39,7 @@
         android:hint="@string/HintDestinationLocation"
         android:background="@drawable/edittext_background"
         android:inputType="text"
+        android:padding="5dp"
         tools:layout_editor_absoluteX="100dp"
         tools:layout_editor_absoluteY="288dp" />
 
