@@ -103,15 +103,17 @@ public class ParentHomeFragment extends Fragment {
             @Override
             public void run() {
                 //long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
+                /*
                 getActivity().runOnUiThread(() ->
                         Toast.makeText(getActivity(), "current user id " + currentUserId, Toast.LENGTH_SHORT).show()
-                );
+                );*/
 
                 if(currentUserId != -1){
                     long parentId = daycaredb.parentDao().getParentIdByUserId(String.valueOf(currentUserId));
+                    /*
                     getActivity().runOnUiThread(() ->
                             Toast.makeText(getActivity(), "paren "+ parentId, Toast.LENGTH_SHORT).show()
-                    );
+                    );*/
 
                     List<Entry> entries = daycaredb.entryDao().getEntriesByParentId(parentId);
 

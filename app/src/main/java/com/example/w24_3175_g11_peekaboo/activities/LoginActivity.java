@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Test", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, "Test", Toast.LENGTH_SHORT).show();
                 Intent intent = mGoogleSignInClient.getSignInIntent();
                 googleSignInLauncher.launch(intent);
             }
