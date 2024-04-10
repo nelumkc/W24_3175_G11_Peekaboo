@@ -24,6 +24,7 @@ public class GoogleMapFragment extends Fragment {
         EditText editTextSource = view.findViewById(R.id.editTextSourceLocation);
         EditText editTextDestination = view.findViewById(R.id.editTextDestinationLocation);
         Button btnOpenNavigation = view.findViewById(R.id.BtnOpenNavigation);
+        editTextDestination.setText("Kids Canvas Childcare");
 
         //set up the onclick listener for the button
         btnOpenNavigation.setOnClickListener(new View.OnClickListener() {

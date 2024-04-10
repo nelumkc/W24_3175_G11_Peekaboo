@@ -184,7 +184,7 @@ public class ChildRegistrationFragment extends Fragment {
     }
 
     private void uploadImageToFirebase(Uri uri) {
-        Toast.makeText(getActivity(), "uploadimage", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "uploadimage", Toast.LENGTH_SHORT).show();
         String fileName = System.currentTimeMillis() + "." + getFileExtension(uri);
         StorageReference fileRef = storageReference.child("images/" + fileName);
         fileRef.putFile(uri)
@@ -261,10 +261,10 @@ public class ChildRegistrationFragment extends Fragment {
                     String message = "Hi Parent,\n\n" +
                             "You have received this email because a Peekaboo account has been created for you by Peekaboo" +
                             " Childcare. To access your account please set your password.\n" +
-                            "Password: " + userpassword
+                            "One Time Password: " + userpassword
                             ;
 
-                parentEmail = "kaleynk19@gmail.com";
+                //parentEmail = "kaleynk19@gmail.com";
                 final String receiverEmail = parentEmail;
 
                     final String stringHost = "smtp.gmail.com";

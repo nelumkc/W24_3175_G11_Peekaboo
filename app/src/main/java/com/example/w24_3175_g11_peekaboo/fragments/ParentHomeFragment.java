@@ -180,7 +180,7 @@ public class ParentHomeFragment extends Fragment {
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                             .setSmallIcon(R.drawable.peekaboo)
                             .setContentTitle(notification.getNotTitle())
-                            .setContentText("Test content")
+                            .setContentText(notification.getNotTitle())
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     builder.setAutoCancel(true)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
