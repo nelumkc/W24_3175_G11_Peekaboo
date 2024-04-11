@@ -49,6 +49,7 @@ public class MoreFragment extends Fragment {
         Button logoutButton = view.findViewById(R.id.btnLogout);
 
 
+        //Logout button setup
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +64,7 @@ public class MoreFragment extends Fragment {
             }
         });
 
+        //Live streaming
         btnStartNewLive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +75,7 @@ public class MoreFragment extends Fragment {
                     editName.requestFocus();
                     return;
                 }
-
+                // Validate liveId length
                 if(liveId.length()>0 && liveId.length()!=5){
                     editName.setError("Invalid id");
                     editName.requestFocus();
@@ -118,15 +120,18 @@ public class MoreFragment extends Fragment {
         editor.apply();
     }
 
+    // Initiates the meeting/live session
     void startMeeting(){
 
         boolean isHost = true;
+        // Check if the user is joining as a host or participant
         if(liveId.length()==5){
             isHost = false;
         }else{
-            liveId = generateLiveId();
+            liveId = generateLiveId();// Generate a new liveId if hosting
         }
         userId = UUID.randomUUID().toString();
+        // Prepare Intent to start LiveActivity
         Intent intent = new Intent(getActivity(), LiveActivity.class);
         intent.putExtra("user_id",userId);
         intent.putExtra("name",name);
@@ -135,6 +140,7 @@ public class MoreFragment extends Fragment {
         startActivity(intent);
     }
 
+    // Generates a random 5-digit liveId
     String generateLiveId(){
         StringBuilder id = new StringBuilder();
         while (id.length()!=5){

@@ -54,6 +54,7 @@ public class ParentHomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_parent_home, container, false);
 
+        // Initialize database and adapter for the RecyclerView
         daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
         entryList = new ArrayList<>();
         adapter = new EntryAdapter(getContext(),entryList,this::navigateToEntryFragment);
@@ -61,16 +62,17 @@ public class ParentHomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Retrieve the current user's ID from SharedPreferences
         long currentUserId = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
 
-        displayData(currentUserId);
-
+        // Display data and send push notifications based on the current user
         sendPushNotification(currentUserId);
+        displayData(currentUserId);
 
         //adding the image slider
         ImageSlider imageSlider = view.findViewById(R.id.image_slider);
 
-        daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
+        //daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
 
         getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).getLong("currentUserId", -1);
         long parentId = daycaredb.parentDao().getParentIdByUserId(String.valueOf(currentUserId));
@@ -155,12 +157,13 @@ public class ParentHomeFragment extends Fragment {
         executor.execute(new Runnable() {
             @Override
             public void run() {
+                // Fetch list of notifications for the current user from the database.
                 List<Notification> notificationList = daycaredb.notificationDao().getNotificationDetailsByUser(String.valueOf(currentUserId));
 
                 String CHANNEL_ID = "peekaboo_channel_1";
                 NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-                //create channel
+                // For Android Oreo and above, create a notification channel.
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     NotificationChannel notificationChannel =
                             notificationManager.getNotificationChannel(CHANNEL_ID);
@@ -176,29 +179,34 @@ public class ParentHomeFragment extends Fragment {
                 }
 
                 final int[] notificationId = {0};
+                // Loop through each notification and display it.
                 for(Notification notification:notificationList){
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                             .setSmallIcon(R.drawable.peekaboo)
                             .setContentTitle(notification.getNotTitle())
                             .setContentText(notification.getNotTitle())
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    builder.setAutoCancel(true)
+                    builder.setAutoCancel(true)// Make the notification disappear after it is clicked.
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+                    // Intent that gets called when the notification is clicked.
+                    // push notification is display in ParentHomeFragment page is not load again
                     Intent intent = new Intent(getContext().getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //intent.putExtra("token", token);
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(getContext().getApplicationContext(),
                             0,intent,PendingIntent.FLAG_MUTABLE);
                     builder.setContentIntent(pendingIntent);
 
+                    // Ensure the fragment is still attached to an activity.
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 final int id = notificationId[0]++;
+                                // Notify the user with the built notification.
                                 notificationManager.notify(id, builder.build());
+                                // Mark the notification as sent in the database.
                                 daycaredb.notificationDao().updateNotification(notification.getNotId());
                             }
                         });

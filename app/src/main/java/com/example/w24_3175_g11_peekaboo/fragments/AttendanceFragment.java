@@ -18,6 +18,7 @@ import com.example.w24_3175_g11_peekaboo.R;
 import com.example.w24_3175_g11_peekaboo.adapters.AttendanceAdapter;
 import com.example.w24_3175_g11_peekaboo.adapters.ChildAdapter;
 import com.example.w24_3175_g11_peekaboo.databases.DaycareDatabase;
+import com.example.w24_3175_g11_peekaboo.interfaces.AttendanceUpdateCallback;
 import com.example.w24_3175_g11_peekaboo.model.Child;
 
 import java.text.SimpleDateFormat;
@@ -54,14 +55,15 @@ public class AttendanceFragment extends Fragment {
 
         daycaredb = Room.databaseBuilder(getContext().getApplicationContext(), DaycareDatabase.class, "daycare.db").allowMainThreadQueries().build();
         childrenList = new ArrayList<>();
-
-        adapter = new AttendanceAdapter(getContext(),childrenList,daycaredb);
+        // Initialize the RecyclerView and its adapter
+        adapter = new AttendanceAdapter(getContext(),childrenList,daycaredb,this::onAttendanceUpdated );
         recyclerView = view.findViewById(R.id.recyclerViewAttendance);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         displayData();
 
+        // Update attendance counts (present and absent)
         updateAttendanceCounts();
 
 
@@ -74,8 +76,10 @@ public class AttendanceFragment extends Fragment {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String currentDate = sdf.format(new Date());
 
+            // Query the database for the count of present and absent children
             int presentTotal = daycaredb.childDao().countPresentChildren(currentDate);
             int absentTotal = daycaredb.childDao().countAbsentChildren(currentDate);
+
 
             getActivity().runOnUiThread(() -> {
                 presentCount.setText("Present: " + presentTotal);
@@ -91,6 +95,7 @@ public class AttendanceFragment extends Fragment {
             @Override
             public void run() {
                 List<Child> children = daycaredb.childDao().getAllChildren();
+                // Update the RecyclerView
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -107,5 +112,10 @@ public class AttendanceFragment extends Fragment {
             }
         });
 
+    }
+
+    // Callback method to update attendance counts
+    public void onAttendanceUpdated(){
+        updateAttendanceCounts();
     }
 }

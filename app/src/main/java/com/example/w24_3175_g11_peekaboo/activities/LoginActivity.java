@@ -69,9 +69,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // create admin when first installation
-        daycaredb = Room.databaseBuilder(this.getApplicationContext(), DaycareDatabase.class, "daycare.db").build();
 
+        daycaredb = Room.databaseBuilder(this.getApplicationContext(), DaycareDatabase.class, "daycare.db").build();
+        // create admin when first installation
         checkFirstRunAndCreateAdmin();
 
         //Login
@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
+        // Automatically navigate to MainActivity if "Remember Me" is checked
         if (getRememberMePreference() && currentUser != null) {
             navigateToMainActivity();
         }

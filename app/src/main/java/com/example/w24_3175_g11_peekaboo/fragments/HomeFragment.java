@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
 
         List<Item> itemList = new ArrayList<>();
         try {
+            // Load the JSON array from the assets folder
             JSONArray jsonArray = JsonUtils.loadJSONArrayFromAsset(this.getContext(), "home_data.json");
 
             if (jsonArray != null) {
@@ -68,7 +69,7 @@ public class HomeFragment extends Fragment {
                 //Toast.makeText(getActivity(), "click event", Toast.LENGTH_SHORT).show();
                 Fragment selectedFragment = null;
                 String Title = null;
-
+                // Decide which fragment to navigate to based on the item's properties
                 switch (item.getFragment()) {
                     case "AttendanceFragment":
                         selectedFragment = new AttendanceFragment();
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(getActivity(), "Fragment not found", Toast.LENGTH_SHORT).show();
                         break;
                 }
-
+                // If a valid fragment was selected, perform the fragment transaction
                 if (selectedFragment != null) {
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();

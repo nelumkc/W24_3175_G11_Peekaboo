@@ -29,6 +29,7 @@ public class LiveActivity extends AppCompatActivity {
 
     TextView textLiveId;
 
+    // Request code and permissions required for live streaming
     private static final int PERMISSION_REQ_ID = 1001;
     private static final String[] REQUIRED_PERMISSIONS = new String[]{
             android.Manifest.permission.CAMERA,
@@ -40,6 +41,7 @@ public class LiveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live);
 
+        // Check for necessary permissions at runtime
         if (!checkPermissions()) {
             requestPermissions();
         }
@@ -47,15 +49,17 @@ public class LiveActivity extends AppCompatActivity {
         txtLiveId = findViewById(R.id.txtLive);
         btnShare = findViewById(R.id.btnShare);
 
-
+       // Retrieve information passed from the previous activity
         userId = getIntent().getStringExtra("user_id");
         name = getIntent().getStringExtra("name");
         liveID = getIntent().getStringExtra("live_id");
         isHost = getIntent().getBooleanExtra("host",false);
 
         txtLiveId.setText(liveID);
+        // Add the live streaming fragment based on the host status
         addFragment();
 
+        // Set up the share button to share the live session ID
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,15 +72,18 @@ public class LiveActivity extends AppCompatActivity {
         });
     }
 
+    // Adds the Zego live streaming fragment to the activity
     void addFragment(){
         Toast.makeText(this, "Host"+ isHost, Toast.LENGTH_SHORT).show();
         ZegoUIKitPrebuiltLiveStreamingConfig config;
+        // Configure the live streaming session based on the user's role
         if(isHost){
             config = ZegoUIKitPrebuiltLiveStreamingConfig.host();
         }else{
             config = ZegoUIKitPrebuiltLiveStreamingConfig.audience();
         }
 
+        // Create and add the live streaming fragment to the activity
         ZegoUIKitPrebuiltLiveStreamingFragment fragment = ZegoUIKitPrebuiltLiveStreamingFragment.newInstance(
                 Constant.appId,Constant.appSign,userId,name,liveID,config        );
         getSupportFragmentManager().beginTransaction()
@@ -99,7 +106,7 @@ public class LiveActivity extends AppCompatActivity {
                     return;
                 }
             }
-            // Permissions are granted. You can initialize components that require permissions here
+
         }
     }
 

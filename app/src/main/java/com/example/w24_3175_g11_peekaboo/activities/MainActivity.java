@@ -59,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
         //bottom navigation
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        //replace container->frame layout with home fragment
+
         daycaredb = Room.databaseBuilder(this.getApplicationContext(), DaycareDatabase.class, "daycare.db").build();
 
-        //userRole = "PARENT"; // DEFAULT
+
         String userEmail = getIntent().getStringExtra("userEmail");
 
         if(userEmail!=null){

@@ -38,7 +38,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    //
+    //Android Jetpack Navigation component
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     //
@@ -68,7 +68,7 @@ dependencies {
 
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-    //smtp
+    //sending email
     implementation ("com.sun.mail:android-mail:1.6.0")
     implementation ("com.sun.mail:android-activation:1.6.0")
     //Live streaming

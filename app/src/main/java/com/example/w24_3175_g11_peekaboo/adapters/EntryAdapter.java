@@ -70,6 +70,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             }
         });
 
+        // Sets up a click listener for the download icon to download the entry's image.
         holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,7 +114,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         File imageFile = new File(storageDir, fileName);
 
         imageRef.getFile(imageFile).addOnSuccessListener(taskSnapshot -> {
-            // Image downloaded successfully, now let's save it to the gallery
+            // Image downloaded successfully, save it to the gallery
             addPictureToGallery(imageFile.getAbsolutePath());
             Toast.makeText(context, "Image Downloaded and saved to Gallery", Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {

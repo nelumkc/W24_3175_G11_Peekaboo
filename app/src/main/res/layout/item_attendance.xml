@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="1dp"
     app:cardCornerRadius="1dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/LightGreenColor">
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,6 +32,7 @@
         android:layout_weight="1"
         android:layout_marginStart="16dp"
         android:text="Child Name"
+        android:textColor="#ffffff"
         android:textSize="18sp" />
 
 
@@ -54,7 +56,7 @@
         android:textSize="16sp"
         android:textColor="#ffffff"
         android:textAllCaps="false"
-        android:background="@drawable/button_background"
+        android:background="#00732c"
         android:drawablePadding="8dp"
         />
 

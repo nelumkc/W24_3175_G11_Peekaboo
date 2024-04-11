@@ -94,6 +94,7 @@ public class ChildRegistrationFragment extends Fragment {
         registerButton = view.findViewById(R.id.btnRegister);
         uploadButton = view.findViewById(R.id.btnUpload);
         profilePic = view.findViewById(R.id.picProfile);
+        // Set up the date picker button
         initDatePicker();
         dateButton = view.findViewById(R.id.datePickerButton);
 
@@ -111,8 +112,6 @@ public class ChildRegistrationFragment extends Fragment {
                 RadioButton selectedRadioButton = view.findViewById(selectedId);
                 String gender = selectedRadioButton != null ? selectedRadioButton.getText().toString() : "";
 
-                //profile pic
-                //String imagePath = currentImagePath;
 
                 daycaredb = Room.databaseBuilder(getContext().getApplicationContext(),DaycareDatabase.class,"daycare.db").build();
 
@@ -248,6 +247,7 @@ public class ChildRegistrationFragment extends Fragment {
     }
 
 
+    // Email sending using JavaMail API in a background thread
     private void sendEmail() {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -264,8 +264,9 @@ public class ChildRegistrationFragment extends Fragment {
                             "One Time Password: " + userpassword
                             ;
 
-                //parentEmail = "kaleynk19@gmail.com";
-                final String receiverEmail = parentEmail;
+                    //parentEmail = "kaleynk19@gmail.com";
+                    // SMTP server information
+                    final String receiverEmail = parentEmail;
 
                     final String stringHost = "smtp.gmail.com";
 
@@ -274,7 +275,7 @@ public class ChildRegistrationFragment extends Fragment {
                     properties.put("mail.smtp.starttls.enable", "true");
                     properties.put("mail.smtp.host", stringHost);
                     properties.put("mail.smtp.port", "587");
-
+                    // Create a mail session with the specified properties and authenticate with the sender's credentials
                     Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
                         @Override
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -283,6 +284,7 @@ public class ChildRegistrationFragment extends Fragment {
                     });
 
                     try {
+                        // Prepare the email message
                         MimeMessage mimeMessage = new MimeMessage(session);
                         mimeMessage.setFrom(new InternetAddress(username));
                         mimeMessage.setRecipients(Message.RecipientType.TO,InternetAddress.parse(receiverEmail));
@@ -318,12 +320,6 @@ public class ChildRegistrationFragment extends Fragment {
 
             }
         });
-
-
-
-
-
-
 
     }
 }
